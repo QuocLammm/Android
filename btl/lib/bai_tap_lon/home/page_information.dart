@@ -1,11 +1,7 @@
-import 'package:btl/bai_tap_lon/widget/radio_button.dart';
-import 'package:btl/bai_tap_lon/widget/wrapper_data.dart';
 import 'package:flutter/material.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:btl/bai_tap_lon/widget/radio_button.dart';
-import 'package:btl/bai_tap_lon/widget/wrapper_data.dart';
-import 'package:flutter/material.dart';
+
 
 class PageProfile extends StatelessWidget {
   const PageProfile({super.key});
@@ -45,7 +41,7 @@ class PageProfile extends StatelessWidget {
               child: Text("Chỉnh sửa",style: TextStyle(color:Colors.black),),
             ),
           ),
-          Divider(),
+          Divider(thickness: 1.5,),
           SizedBox(height: 30,),
           ListTile(
             leading: Container(
@@ -125,7 +121,9 @@ class PageProfile extends StatelessWidget {
             child: ElevatedButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => PageLogin(),), (route) => false);
+                  Navigator.pushAndRemoveUntil(context,
+                      MaterialPageRoute(builder: (context)
+                      => PageLogin(),), (route) => false);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

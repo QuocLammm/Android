@@ -6,10 +6,6 @@ class PageNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Thông báo"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
     );
   }
 }

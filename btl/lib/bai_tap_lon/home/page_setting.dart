@@ -6,10 +6,6 @@ class PageSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Cài đặt"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
     );
   }
 }

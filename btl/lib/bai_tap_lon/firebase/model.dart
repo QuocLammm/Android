@@ -85,7 +85,6 @@ class GioHangItem{
   GioHangItem({required this.f,required this.soLuong});
 }
 
-
 ////////////////////////////////Coffee///////////////////
 class Drink{
   String id;
@@ -255,16 +254,10 @@ class DrinkTeaSnapshot{
         ).toList()
     );
   }
-  ///
-  static Stream<List<DrinkTeaSnapshot>> getTop3(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Tea")
-        .limit(3)
-        .snapshots();
-    return sqs.map(
-            (qs) => qs.docs.map(
-                (docSnap) => DrinkTeaSnapshot.fromMap(docSnap)
-        ).toList()
-    );
+
+  static Future<List<DrinkTeaSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Tea").get();
+    return qs.docs.map((docSnap) => DrinkTeaSnapshot.fromMap(docSnap)).toList();
   }
   //Truy vấn dữ liệu một lần
   static Future<List<DrinkTeaSnapshot>> getAll2() async{
@@ -274,8 +267,6 @@ class DrinkTeaSnapshot{
     ).toList();
   }
 }
-
-
 class GioHangItemT{
   DrinkTea drinkTea;
   int sluong;
@@ -353,23 +344,17 @@ class CakeSnapshot{
         ).toList()
     );
   }
-  static Stream<List<CakeSnapshot>> getTop3(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Cakes")
-        .limit(3)
-        .snapshots();
-    return sqs.map(
-            (qs) => qs.docs.map(
-                (docSnap) => CakeSnapshot.fromMap(docSnap)
-        ).toList()
-    );
-  }
-
   //Truy vấn dữ liệu một lần
   static Future<List<CakeSnapshot>> getAll2() async{
     QuerySnapshot qs = await FirebaseFirestore.instance.collection("Cakes").get();
     return qs.docs.map(
             (docSnap) => CakeSnapshot.fromMap(docSnap)
     ).toList();
+  }
+//
+  static Future<List<CakeSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Cakes").get();
+    return qs.docs.map((docSnap) => CakeSnapshot.fromMap(docSnap)).toList();
   }
 }
 
@@ -456,6 +441,11 @@ class JuiceSnapshot{
     return qs.docs.map(
             (docSnap) => JuiceSnapshot.fromMap(docSnap)
     ).toList();
+  }
+  //
+  static Future<List<JuiceSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Juices").get();
+    return qs.docs.map((docSnap) => JuiceSnapshot.fromMap(docSnap)).toList();
   }
 }
 

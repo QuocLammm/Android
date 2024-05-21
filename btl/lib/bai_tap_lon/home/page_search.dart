@@ -68,10 +68,6 @@ class _PageSearchState extends State<PageSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Tìm kiếm"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
