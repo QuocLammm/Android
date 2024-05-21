@@ -17,11 +17,11 @@ class PageLogin extends StatelessWidget {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
-          return 'User not exists';
+          return 'Tài khoản không tồn tại';
         case 'wrong-password':
-          return 'Password does not match';
+          return 'Mật khẩu không đúng';
         default:
-          return 'An error occurred';
+          return 'Đã xảy ra lỗi';
       }
     }
   }
@@ -36,11 +36,11 @@ class PageLogin extends StatelessWidget {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':
-          return 'Email already in use';
+          return 'Email đã có người sử dụng';
         case 'weak-password':
-          return 'Password is too weak';
+          return 'Mật khẩu quá yếu';
         default:
-          return 'An error occurred';
+          return 'Đã xảy ra lỗi';
       }
     }
   }
@@ -51,62 +51,67 @@ class PageLogin extends StatelessWidget {
       return null; // return null if recovery email is sent
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        return 'User not exists';
+        return 'Tài khoản không tồn tại';
       } else {
-        return 'An error occurred';
+        return 'Đã xảy ra lỗi';
       }
     }
   }
   @override
   Widget build(BuildContext context) {
-    return FlutterLogin(
-      title: 'LTP',
-      //logo: const AssetImage('assets/images/ecorp-lightblue.png') //them anh neu thich,
-      onLogin: _authUser,
-      onSignup: _signupUser,
-      loginProviders: [
-        LoginProvider(
-          icon: FontAwesomeIcons.google,
-          label: 'Google',
-          callback: () async {
-            debugPrint('start google sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop google sign in');
-            return null;
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: FlutterLogin(
+          title: 'LTP',
+          //logo: const AssetImage('assets/images/ecorp-lightblue.png') //them anh neu thich,
+          onLogin: _authUser,
+          onSignup: _signupUser,
+          loginProviders: [
+            LoginProvider(
+              icon: FontAwesomeIcons.google,
+              label: 'Google',
+              callback: () async {
+                debugPrint('start google sign in');
+                await Future.delayed(loginTime);
+                debugPrint('stop google sign in');
+                return null;
+              },
+            ),
+            LoginProvider(
+              icon: FontAwesomeIcons.facebookF,
+              label: 'Facebook',
+              callback: () async {
+                debugPrint('start facebook sign in');
+                await Future.delayed(loginTime);
+                debugPrint('stop facebook sign in');
+                return null;
+              },
+            ),
+          ],
+          onSubmitAnimationCompleted: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const PageHomeCf(),
+            ));
           },
+          onRecoverPassword: _recoverPassword,
+          messages: LoginMessages(
+            userHint: 'Email',
+            passwordHint: 'Mật khẩu',
+            confirmPasswordHint: 'Nhập lại mật khẩu',
+            loginButton: 'ĐĂNG NHẬP',
+            signupButton: 'ĐĂNG KÝ',
+            forgotPasswordButton: 'Quên mật khẩu?',
+            recoverPasswordButton: 'LẤY LẠI MẬT KHẨU',
+            goBackButton: 'QUAY LẠI',
+            confirmPasswordError: 'Mật khẩu không đúng!',
+            recoverPasswordDescription:
+            'Vui lòng nhập tên mail vào ô trống để tiến hành lấy mật khẩu',
+            recoverPasswordSuccess: 'Mật khẩu đã được khôi phục thành công',
+            recoverPasswordIntro: 'Lấy lại mật khẩu ở đây',
+            providersTitleFirst: 'Hoặc',
+      
+          ),
         ),
-        LoginProvider(
-          icon: FontAwesomeIcons.facebookF,
-          label: 'Facebook',
-          callback: () async {
-            debugPrint('start facebook sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop facebook sign in');
-            return null;
-          },
-        ),
-      ],
-      onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const PageHomeCf(),
-        ));
-      },
-      onRecoverPassword: _recoverPassword,
-      messages: LoginMessages(
-        userHint: 'Email',
-        passwordHint: 'Mật khẩu',
-        confirmPasswordHint: 'Nhập lại mật khẩu',
-        loginButton: 'ĐĂNG NHẬP',
-        signupButton: 'ĐĂNG KÝ',
-        forgotPasswordButton: 'Quên mật khẩu?',
-        recoverPasswordButton: 'LẤY LẠI MẬT KHẨU',
-        goBackButton: 'QUAY LẠI',
-        confirmPasswordError: 'Mật khẩu không đúng!',
-        recoverPasswordDescription:
-        'Vui lòng nhập tên mail vào ô trống để tiến hành lấy mật khẩu',
-        recoverPasswordSuccess: 'Mật khẩu đã được khôi phục thành công',
-        recoverPasswordIntro: 'Lấy lại mật khẩu ở đây',
-        providersTitleFirst: 'Đăng nhập bằng tài khoản khác'
       ),
     );
   }
