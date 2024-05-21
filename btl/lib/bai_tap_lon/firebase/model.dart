@@ -380,3 +380,89 @@ class GioHangItemC{
 
   GioHangItemC({required this.cake,required this.sluongC});
 }
+///////////////////Juices////////////
+///////////////////////Tea////////////////////////
+class Juices{
+  String id;
+  String ten;
+  String? anh;
+  int gia;
+  String? moTa;
+  Juices({required this.id,required this.ten, required this.anh, required this.gia,this.moTa});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'ten': this.ten,
+      'anh': this.anh,
+      'gia': this.gia,
+      'moTa': this.moTa,
+    };
+  }
+
+  factory Juices.fromJson(Map<String, dynamic> map) {
+    return Juices(
+      id: map['id'] as String,
+      ten: map['ten'] as String,
+      anh: map['anh'] as String,
+      gia: map['gia'] as int,
+      moTa: map['moTa'] as String,
+    );
+  }
+}
+
+//Lớp truy cập dữ liệu
+class JuiceSnapshot{
+  Juices juices; // biến vị trí của document trên firebase_storage
+  DocumentReference ref;
+
+  JuiceSnapshot({required this.juices,required this.ref});
+
+  factory JuiceSnapshot.fromMap(DocumentSnapshot docSnap){
+    return JuiceSnapshot(
+        juices: Juices.fromJson(docSnap.data() as Map<String, dynamic>), // ép kiểu
+        ref: docSnap.reference
+    );
+  }
+
+  static Future<DocumentReference> themDTJuice(Juices juices) async {
+    return FirebaseFirestore.instance.collection("Juices").add(juices.toJson());
+  }
+
+  //Cập nhật dữ liệu
+  Future<void> capNhatDTJuice(Juices juices) async{
+    return ref.update(juices.toJson());
+  }
+
+  //Xóa dữ liệu
+  Future<void> xoaDTJuice() async{
+    return ref.delete();
+  }
+
+  //Truy vấn dữ liệu theo thời gian thực
+  static Stream<List<JuiceSnapshot>> getAll(){
+    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Juices")
+        .snapshots();
+    return sqs.map(
+            (qs) => qs.docs.map(
+                (docSnap) => JuiceSnapshot.fromMap(docSnap)
+        ).toList()
+    );
+  }
+
+  //Truy vấn dữ liệu một lần
+  static Future<List<JuiceSnapshot>> getAll2() async{
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Juices").get();
+    return qs.docs.map(
+            (docSnap) => JuiceSnapshot.fromMap(docSnap)
+    ).toList();
+  }
+}
+
+
+class GioHangItemJ{
+  Juices juices;
+  int sluongJ;
+
+  GioHangItemJ({required this.juices,required this.sluongJ});
+}

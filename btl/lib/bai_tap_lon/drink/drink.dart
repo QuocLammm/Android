@@ -1,6 +1,7 @@
 import 'package:btl/bai_tap_lon/drink/cake/page_cake.dart';
 import 'package:btl/bai_tap_lon/drink/drink_coffe/drink_coffe.dart';
 import 'package:btl/bai_tap_lon/drink/drink_tea/drink_tea.dart';
+import 'package:btl/bai_tap_lon/drink/juice/drink_juices.dart';
 import 'package:flutter/material.dart';
 
 
@@ -93,9 +94,9 @@ class DSDrink extends StatelessWidget {
             color: Colors.tealAccent,
             elevation: 1,
             child: GestureDetector(
-              // onTap: () => Navigator.of(context).push(
-              //     MaterialPageRoute(builder:(context) => DrinkTea(),)
-              // ),
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder:(context) => DrinkJuice(),)
+              ),
               child: Column(
                 children: [
                   Expanded(
@@ -106,7 +107,7 @@ class DSDrink extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: Text("Các loại thức uống khác",
+                    child: Text("Các loại nước ép",
                       style: TextStyle(color: Colors.black54, fontSize: 20),),
                   )
                 ],

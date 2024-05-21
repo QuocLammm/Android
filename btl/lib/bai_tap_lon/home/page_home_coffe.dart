@@ -64,7 +64,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
   void fetchBestSellers() async {
     List<DrinkSnapshot> allDrinks = await DrinkSnapshot.getAllOnce();
     setState(() {
-      bestsellerItems = allDrinks.map((snap) => snap.drink).take(8).toList(); // Fetch 3 best-selling drinks
+      bestsellerItems = allDrinks.map((snap) => snap.drink).take(4).toList(); // Fetch 3 best-selling drinks
     });
   }
 
@@ -109,7 +109,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
                   onTap: () {
                     // Navigator.of(context).push(
                     //   MaterialPageRoute(builder: (context) => MyProfile()),
-                    // );
+                    // );// giỏ hàng
                   },
                   child: Icon(Icons.shopping_cart),
                 ),
@@ -413,7 +413,7 @@ _buildBody(BuildContext context, int index) {
   }
 }
 Widget _buildInforPage(){
-  return PageInformation();
+  return PageProfile();
 }
 Widget _buildSettingsPage() {
   return PageSetting();
@@ -428,6 +428,6 @@ Widget _buildSearchPage() {
 }
 
 Widget _buildHomePage() {
-  return buildPageHome(bestsellerItems: []);
+  return buildPageHome(bestsellerItems: [],);
 }
 
