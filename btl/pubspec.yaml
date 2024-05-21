@@ -53,6 +53,8 @@ dependencies:
   firebase_ui_firestore: ^1.0.0
   flutterfire_ui: ^0.4.3+20
   url_launcher: ^6.2.6
+  geolocator: ^8.2.1
+  google_maps_flutter: ^2.1.1
 
 dev_dependencies:
   flutter_test:

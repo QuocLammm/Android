@@ -6,6 +6,9 @@ import 'package:btl/bai_tap_lon/drink/drink_coffe/drink_coffe.dart';
 import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:geolocator/geolocator.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 
 
@@ -18,13 +21,34 @@ class PageHomeCf extends StatefulWidget {
 
 class _PageHomeCfState extends State<PageHomeCf> {
   List<Drink> bestsellerItems = [];
-
+  late String lat,long;
   @override
   void initState() {
     super.initState();
     fetchBestSellers();
   }
+  void _liveLocation(){
+    LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 100
+    );
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      lat = position.latitude.toString();
+      long = position.longitude.toString();
+      setState(() {
 
+      });
+    });
+  }
+  Future<void> _openMap(String lat,String long) async {
+    String googleURL = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+    if (await canLaunchUrlString(googleURL)) {
+      await launchUrlString(googleURL);
+    } else {
+      throw 'Could not launch $googleURL';
+    }
+  }
   void fetchBestSellers() async {
     List<DrinkSnapshot> allDrinks = await DrinkSnapshot.getAllOnce();
     setState(() {
@@ -32,8 +56,10 @@ class _PageHomeCfState extends State<PageHomeCf> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"), // tên người dùng
@@ -41,7 +67,31 @@ class _PageHomeCfState extends State<PageHomeCf> {
         actions: [
           Row(
             children: [
-              Icon(Icons.sailing),// lấy vị trí
+              Column(
+                children: [
+                  SizedBox(height: 7,),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0.0,
+                        shadowColor: Colors.transparent,
+
+                      ),
+                      onPressed: () {
+                        _getCurrentLocation().then((value) {
+                          lat = '${value.latitude}';
+                          long = '${value.longitude}';
+                          setState(() {
+                            print(lat);
+                            print(long);
+                          });
+                          _liveLocation();
+                          _openMap(lat, long);
+                        });
+
+                      },
+                      child: Icon(Icons.location_on_outlined))
+                ],
+              ),// lấy vị trí
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: badges.Badge(
@@ -243,3 +293,39 @@ class _BestsellerViewPagerState extends State<BestsellerViewPager> {
   }
 }
 
+Future<Position> _getCurrentLocation() async{
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the
+    // App to enable the location services.
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately.
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  // When we reach here, permissions are granted and we can
+  // continue accessing the position of the device.
+  return await Geolocator.getCurrentPosition();
+}
