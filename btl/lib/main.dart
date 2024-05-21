@@ -1,4 +1,6 @@
+import 'package:btl/bai_tap_lon/firebase/widget_connect_firebase.dart';
 import 'package:btl/bai_tap_lon/home/page_home_full.dart';
+import 'package:btl/bai_tap_lon/login_out/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,14 +13,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MyFirebaseConnect(
+      errorMessage: "Lỗi kết nối FireBase",
+      connectingMessage: "Đang kết nối....",
+      builder: (context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
-        useMaterial3: true,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const PageLogin(),
       ),
-      home: PageHomeCoffe()
     );
   }
 }
