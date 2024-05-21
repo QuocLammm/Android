@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.2.6
   geolocator: ^8.2.1
   google_maps_flutter: ^2.1.1
+  animated_bottom_navigation_bar: ^1.3.3
 
 dev_dependencies:
   flutter_test:

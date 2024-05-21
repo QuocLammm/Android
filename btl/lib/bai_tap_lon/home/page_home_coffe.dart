@@ -4,12 +4,16 @@ import 'package:btl/bai_tap_lon/drink/drink.dart';
 import 'package:btl/bai_tap_lon/drink/drink_coffe/chi_tiet_drink.dart';
 import 'package:btl/bai_tap_lon/drink/drink_coffe/drink_coffe.dart';
 import 'package:btl/bai_tap_lon/firebase/model.dart';
+import 'package:btl/bai_tap_lon/home/page_information.dart';
+import 'package:btl/bai_tap_lon/home/page_notification.dart';
+import 'package:btl/bai_tap_lon/home/page_search.dart';
+import 'package:btl/bai_tap_lon/home/page_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
 
 class PageHomeCf extends StatefulWidget {
@@ -22,6 +26,14 @@ class PageHomeCf extends StatefulWidget {
 class _PageHomeCfState extends State<PageHomeCf> {
   List<Drink> bestsellerItems = [];
   late String lat,long;
+  final List<IconData> iconList = [
+    Icons.search,
+    Icons.notifications,
+    Icons.account_circle_outlined,
+    Icons.settings
+
+  ];
+  int index =0; //index của bottom navigationbar
   @override
   void initState() {
     super.initState();
@@ -59,7 +71,6 @@ class _PageHomeCfState extends State<PageHomeCf> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"), // tên người dùng
@@ -107,104 +118,158 @@ class _PageHomeCfState extends State<PageHomeCf> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Text("Best Seller"),
-          bestsellerItems.isNotEmpty
-              ? BestsellerViewPager(items: bestsellerItems)
-              : CircularProgressIndicator(),
-          Expanded(
-            child: GridView.extent(
-              maxCrossAxisExtent: 300,
-              children: [
-                Card(
-                  color: Colors.lightBlue,
-                  elevation: 1,
-                  child: GestureDetector(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.asset("asset/images/td_hd.png"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text("Khuyến mãi ", style: TextStyle(color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.redAccent,
-                  elevation: 2,
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => DSDrink()),
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.asset("asset/images/monan_hd.png"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text("Menu", style: TextStyle(color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.yellowAccent,
-                  elevation: 1,
-                  child: GestureDetector(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.asset("asset/images/dh_hd.png"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text("Đơn hàng ", style: TextStyle(color: Colors.black)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.green,
-                  elevation: 1,
-                  child: GestureDetector(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.asset("asset/images/ch_hd.png"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text("Cửa hàng ", style: TextStyle(color: Colors.white)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      body: _buildBody(context,index),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.home,
+            color: Colors.black,
           ),
-        ],
-      ),
+          backgroundColor: Colors.green,
+          onPressed: () {
+            setState(() {
+              index = 4; // Set index to home page
+            });
+          },
+            shape: CircleBorder()
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+        itemCount: iconList.length,
+        tabBuilder: (index, isActive) {
+          return Icon(
+            iconList[index],
+            size: 24,
+            color: isActive ? Colors.green : Colors.white,
+          );
+        },
+        backgroundColor: Colors.black54,
+        shadow: BoxShadow(
+          offset: Offset(0, 1),
+          blurRadius: 12,
+          spreadRadius: 0.5,
+          color: Colors.black,
+        ),
+        activeIndex: index,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.softEdge,
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
+        onTap: (selectedIndex) => setState(() {
+          index = selectedIndex;
+        }),
+      )
+
+    );
+  }
+}
+
+class buildPageHome extends StatelessWidget {
+  const buildPageHome({
+    super.key,
+    required this.bestsellerItems,
+  });
+
+  final List<Drink> bestsellerItems;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Best Seller"),
+        bestsellerItems.isNotEmpty
+            ? BestsellerViewPager(items: bestsellerItems)
+            : CircularProgressIndicator(),
+        Expanded(
+          child: GridView.extent(
+            maxCrossAxisExtent: 300,
+            children: [
+              Card(
+                color: Colors.lightBlue,
+                elevation: 1,
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset("asset/images/td_hd.png"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text("Khuyến mãi ", style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                color: Colors.redAccent,
+                elevation: 2,
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => DSDrink()),
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset("asset/images/monan_hd.png"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text("Menu", style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                color: Colors.yellowAccent,
+                elevation: 1,
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset("asset/images/dh_hd.png"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text("Đơn hàng ", style: TextStyle(color: Colors.black)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                color: Colors.green,
+                elevation: 1,
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset("asset/images/ch_hd.png"),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text("Cửa hàng ", style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -244,6 +309,7 @@ class _BestsellerViewPagerState extends State<BestsellerViewPager> {
         curve: Curves.easeIn,
       );
     });
+
   }
 
   @override
@@ -329,3 +395,39 @@ Future<Position> _getCurrentLocation() async{
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
 }
+
+
+//các trang
+_buildBody(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return _buildSearchPage();
+    case 1:
+      return _buildNotificationsPage();
+    case 2:
+      return _buildInforPage();
+    case 3:
+      return _buildSettingsPage();
+    case 4:
+      return _buildHomePage();
+  }
+}
+Widget _buildInforPage(){
+  return PageInformation();
+}
+Widget _buildSettingsPage() {
+  return PageSetting();
+}
+
+Widget _buildNotificationsPage() {
+  return PageNotification();
+}
+
+Widget _buildSearchPage() {
+  return PageSearch();
+}
+
+Widget _buildHomePage() {
+  return buildPageHome(bestsellerItems: []);
+}
+
