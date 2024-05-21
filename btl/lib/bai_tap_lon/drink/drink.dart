@@ -102,7 +102,7 @@ class DSDrink extends StatelessWidget {
                   Expanded(
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: Image.asset("asset/images/soda.png"),
+                      child: Image.asset("asset/images/ep.png"),
                     ),
                   ),
                   Padding(
