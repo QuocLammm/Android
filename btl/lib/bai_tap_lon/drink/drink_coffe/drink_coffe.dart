@@ -1,5 +1,6 @@
 import 'package:btl/bai_tap_lon/drink/drink_coffe/chi_tiet_drink.dart';
 import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
+import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
@@ -22,7 +23,7 @@ class DrinkCoffe extends StatelessWidget {
             child: badges.Badge(
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => GioHangFruitt(),)
+                    MaterialPageRoute(builder: (context) => ShoppingCartPage(),)
                 );
               },
               child: Icon(Icons.shopping_cart,size: 30,),
@@ -41,7 +42,7 @@ class DrinkCoffe extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) =>
-                              PageChiTietDrink(dr: sp),)
+                              PageChiTietDrink(drink: sp,),)
                       ),
                       child: Column(
                         children: [
@@ -61,19 +62,5 @@ class DrinkCoffe extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class GioHangFruitt extends StatelessWidget {
-  const GioHangFruitt({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("My shoping cart fruit"),
-      ),
-    );
-
   }
 }

@@ -60,57 +60,55 @@ class PageLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: FlutterLogin(
-          title: 'LTP',
-          //logo: const AssetImage('assets/images/ecorp-lightblue.png') //them anh neu thich,
-          onLogin: _authUser,
-          onSignup: _signupUser,
-          loginProviders: [
-            LoginProvider(
-              icon: FontAwesomeIcons.google,
-              label: 'Google',
-              callback: () async {
-                debugPrint('start google sign in');
-                await Future.delayed(loginTime);
-                debugPrint('stop google sign in');
-                return null;
-              },
-            ),
-            LoginProvider(
-              icon: FontAwesomeIcons.facebookF,
-              label: 'Facebook',
-              callback: () async {
-                debugPrint('start facebook sign in');
-                await Future.delayed(loginTime);
-                debugPrint('stop facebook sign in');
-                return null;
-              },
-            ),
-          ],
-          onSubmitAnimationCompleted: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const PageHomeCf(),
-            ));
-          },
-          onRecoverPassword: _recoverPassword,
-          messages: LoginMessages(
-            userHint: 'Email',
-            passwordHint: 'Mật khẩu',
-            confirmPasswordHint: 'Nhập lại mật khẩu',
-            loginButton: 'ĐĂNG NHẬP',
-            signupButton: 'ĐĂNG KÝ',
-            forgotPasswordButton: 'Quên mật khẩu?',
-            recoverPasswordButton: 'LẤY LẠI MẬT KHẨU',
-            goBackButton: 'QUAY LẠI',
-            confirmPasswordError: 'Mật khẩu không đúng!',
-            recoverPasswordDescription:
-            'Vui lòng nhập tên mail vào ô trống để tiến hành lấy mật khẩu',
-            recoverPasswordSuccess: 'Mật khẩu đã được khôi phục thành công',
-            recoverPasswordIntro: 'Lấy lại mật khẩu ở đây',
-            providersTitleFirst: 'Hoặc',
-      
+      body: FlutterLogin(
+        title: 'Hello!',
+        //logo: const AssetImage('assets/images/ecorp-lightblue.png') //them anh neu thich,
+        onLogin: _authUser,
+        onSignup: _signupUser,
+        loginProviders: [
+          LoginProvider(
+            icon: FontAwesomeIcons.google,
+            label: 'Google',
+            callback: () async {
+              debugPrint('start google sign in');
+              await Future.delayed(loginTime);
+              debugPrint('stop google sign in');
+              return null;
+            },
           ),
+          LoginProvider(
+            icon: FontAwesomeIcons.facebookF,
+            label: 'Facebook',
+            callback: () async {
+              debugPrint('start facebook sign in');
+              await Future.delayed(loginTime);
+              debugPrint('stop facebook sign in');
+              return null;
+            },
+          ),
+        ],
+        onSubmitAnimationCompleted: () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const PageHomeCf(),
+          ));
+        },
+        onRecoverPassword: _recoverPassword,
+        messages: LoginMessages(
+          userHint: 'Email',
+          passwordHint: 'Mật khẩu',
+          confirmPasswordHint: 'Nhập lại mật khẩu',
+          loginButton: 'ĐĂNG NHẬP',
+          signupButton: 'ĐĂNG KÝ',
+          forgotPasswordButton: 'Quên mật khẩu?',
+          recoverPasswordButton: 'LẤY LẠI MẬT KHẨU',
+          goBackButton: 'QUAY LẠI',
+          confirmPasswordError: 'Mật khẩu không đúng!',
+          recoverPasswordDescription:
+          'Vui lòng nhập tên mail vào ô trống để tiến hành lấy mật khẩu',
+          recoverPasswordSuccess: 'Mật khẩu đã được khôi phục thành công',
+          recoverPasswordIntro: 'Lấy lại mật khẩu ở đây',
+          providersTitleFirst: 'Hoặc',
+
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:btl/bai_tap_lon/home/page_information.dart';
 import 'package:btl/bai_tap_lon/home/page_notification.dart';
 import 'package:btl/bai_tap_lon/home/page_search.dart';
 import 'package:btl/bai_tap_lon/home/page_setting.dart';
+import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
@@ -127,9 +128,9 @@ class _PageHomeCfState extends State<PageHomeCf> {
                 padding: const EdgeInsets.all(8.0),
                 child: badges.Badge(
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(builder: (context) => MyProfile()),
-                    // );// giỏ hàng
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ShoppingCartPage()),
+                    );// giỏ hàng
                   },
                   child: Icon(Icons.shopping_cart),
                 ),
@@ -439,7 +440,7 @@ class _BestsellerViewPagerState extends State<BestsellerViewPager> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PageChiTietDrink(dr: drink),
+          builder: (context) => PageChiTietDrink(drink: drink,),
         ));
       },
       child: Card(

@@ -45,7 +45,7 @@ class _PageSearchState extends State<PageSearch> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PageChiTietDrink(dr: product.drink),
+          builder: (context) => PageChiTietDrink(drink: product.drink),
         ),
       );
     } else if (product is DrinkTeaSnapshot) {

@@ -1,5 +1,6 @@
 import 'package:btl/bai_tap_lon/drink/drink_tea/chi_tiet_drink_tea.dart';
 import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
+import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
@@ -20,7 +21,7 @@ class DrinkTea extends StatelessWidget {
             child: badges.Badge(
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => GioHangTea(),)
+                    MaterialPageRoute(builder: (context) => ShoppingCartPage(),)
                 );
               },
               child: Icon(Icons.shopping_cart, size: 30,),
@@ -59,19 +60,5 @@ class DrinkTea extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class GioHangTea extends StatelessWidget {
-  const GioHangTea({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("My shoping cart tea"),
-      ),
-    );
-
   }
 }

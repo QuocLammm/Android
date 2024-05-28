@@ -130,7 +130,7 @@ class DrinkSnapshot{
   }
 
   static Future<DocumentReference> themD(Fruit fruit) async {
-    return FirebaseFirestore.instance.collection("Foods").add(fruit.toJson());
+    return FirebaseFirestore.instance.collection("DrinkCoffee").add(fruit.toJson());
   }
 
   //Cập nhật dữ liệu
@@ -145,7 +145,7 @@ class DrinkSnapshot{
 
   //Truy vấn dữ liệu theo thời gian thực
   static Stream<List<DrinkSnapshot>> getAll(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Foods")
+    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("DrinkCoffee")
         .snapshots();
     return sqs.map(
             (qs) => qs.docs.map(
@@ -154,24 +154,14 @@ class DrinkSnapshot{
   }
 
   //
-  static Stream<List<DrinkSnapshot>> getTop3(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Foods")
-        .limit(3)
-        .snapshots();
-    return sqs.map(
-            (qs) => qs.docs.map(
-                (docSnap) => DrinkSnapshot.fromMap(docSnap)).toList()
-    );
-  }
-  //
   static Future<List<DrinkSnapshot>> getAllOnce() async {
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Foods").get();
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
     return qs.docs.map((docSnap) => DrinkSnapshot.fromMap(docSnap)).toList();
   }
 
   //Truy vấn dữ liệu một lần
   static Future<List<DrinkSnapshot>> getAll2() async{
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Foods").get();
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
     return qs.docs.map(
             (docSnap) => DrinkSnapshot.fromMap(docSnap)
     ).toList();
@@ -181,9 +171,9 @@ class DrinkSnapshot{
 
 class GioHangItemm{
   Drink dr;
-  int sl;
+  int sluongCF;
 
-  GioHangItemm({required this.dr,required this.sl});
+  GioHangItemm({required this.dr,required this.sluongCF});
 }
 
 ///////////////////////Tea////////////////////////
@@ -269,9 +259,9 @@ class DrinkTeaSnapshot{
 }
 class GioHangItemT{
   DrinkTea drinkTea;
-  int sluong;
+  int sluongT;
 
-  GioHangItemT({required this.drinkTea,required this.sluong});
+  GioHangItemT({required this.drinkTea,required this.sluongT});
 }
 
 
@@ -359,12 +349,16 @@ class CakeSnapshot{
 }
 
 
-class GioHangItemC{
+class GioHangItemC {
   Cake cake;
   int sluongC;
 
-  GioHangItemC({required this.cake,required this.sluongC});
+  GioHangItemC({
+    required this.cake,
+    required this.sluongC,
+  });
 }
+
 ///////////////////Juices////////////
 ///////////////////////Tea////////////////////////
 class Juices{

@@ -2,104 +2,210 @@ import 'dart:math';
 import 'package:badges/badges.dart' as badges;
 import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
 import 'package:btl/bai_tap_lon/firebase/model.dart';
+import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 
-class PageChiTietCake extends StatelessWidget {
-  Cake cake;
-  PageChiTietCake({required this.cake, super.key});
+class PageChiTietCake extends StatefulWidget {
+  final Cake cake;
+  PageChiTietCake({required this.cake, Key? key}) : super(key: key);
+
+  @override
+  _PageChiTietCakeState createState() => _PageChiTietCakeState();
+}
+
+class _PageChiTietCakeState extends State<PageChiTietCake> {
+  int _quantity = 1;
+  double _rating = (Random().nextInt(21)) / 10 + 3;
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width*0.9;
-    double rating = (Random().nextInt(21))/10+3;
-    double rating_person = (Random().nextInt(100)+1000);
+    double w = MediaQuery.of(context).size.width * 0.6;
+    double h = MediaQuery.of(context).size.height * 0.6;
+    int price = widget.cake.gia;
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Chi tiết sản phẩm"),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: badges.Badge(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context)=> PageGioHangFruitT()));
-                },
-                //badgeContent: Text("${}"),
-                child: Icon(Icons.shopping_cart),
+      appBar: AppBar(
+        title: Text("Chi tiết sản phẩm"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: badges.Badge(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ShoppingCartPage()),
+                );
+              },
+              child: Icon(Icons.shopping_cart),
+            ),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 5.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: w,
+                child: Image.network(widget.cake.anh ?? "No image"),
               ),
             ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: 5.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: w,
-                  child: Image.network(cake.anh ?? "No image"),
+            SizedBox(height: 20),
+            Divider(thickness: 2.5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.cake.ten,
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 20,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(cake.ten,style: TextStyle(color: Colors.blue,fontSize: 30),),
-                  Row(
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(widget.cake.moTa ?? ""),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RatingBar.builder(
+                  initialRating: _rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _rating = rating;
+                    });
+                  },
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${price} vnđ",
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.yellowAccent,
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${cake.gia} vnđ",style: TextStyle(color: Colors.red,fontSize: 20),),
-                      SizedBox(width: 10,),
-                      Text("${cake.gia*1.8} vnđ",style: TextStyle(fontSize:20,decoration: TextDecoration.lineThrough),),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (_quantity > 1) _quantity--;
+                              });
+                            },
+                            icon: Icon(Icons.remove),
+                          ),
+                          Text(
+                            '$_quantity',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _quantity++;
+                              });
+                            },
+                            icon: Icon(Icons.add),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  Text(cake.moTa!),
-                  Row(
-                    children: [
-                      RatingBar.builder(
-                        initialRating:rating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                ),
+              ],
+            ),
+            Spacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tổng Tiền: ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
                         ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      Text("${rating}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.red),),
-                    ],
-                  )
-                ],
-              )
-            ],
-          ),
+                        Text("${price * _quantity} vnđ"),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            final controller = Get.find<SP_Controller>();
+                            controller.themvaoCake(widget.cake, _quantity); // Navigate to the cart page
+                          },
+                          icon: Icon(Icons.add_shopping_cart, color: Colors.purple),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final controller = Get.find<SP_Controller>();
-            controller.themvaoCake(cake);
-          },
-          child: Icon(Icons.add_shopping_cart_outlined, color: Colors.purple,),
-        )
+      ),
     );
   }
 }
 
 
-class PageGioHangFruitT extends StatelessWidget {
-  const PageGioHangFruitT({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+
+
