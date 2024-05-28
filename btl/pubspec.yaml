@@ -94,6 +94,7 @@ flutter:
   - asset/images/ep.png
   - asset/images/1.jpg
   - asset/images/lam.jpg
+  #- asset/images/tich.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

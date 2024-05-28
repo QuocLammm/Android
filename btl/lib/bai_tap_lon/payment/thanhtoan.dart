@@ -1,6 +1,7 @@
-import 'package:btl/bai_tap_lon/Update/update.dart';
+import 'dart:math';
+import 'package:btl/bai_tap_lon/Update_history/update.dart';
 import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
-import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
+import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:btl/bai_tap_lon/firebase/model.dart';
@@ -133,12 +134,16 @@ class ShoppingCartPage extends StatelessWidget {
   }
 
   void hienthiDiaLog(BuildContext context, SP_Controller controller, double totalAmount) {
+    // Tạo mã số ngẫu nhiên
+    var random = Random();
+    int orderId = random.nextInt(1000000); // Mã số ngẫu nhiên trong khoảng từ 0 đến 999999
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Xác nhận thanh toán'),
-          content: Text('Tổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ'),
+          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.'),
           actions: <Widget>[
             TextButton(
               child: Text('Hủy'),
@@ -152,15 +157,23 @@ class ShoppingCartPage extends StatelessWidget {
                 controller.xoaTatCaSanPham();
                 Navigator.of(context).pop();
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => PageHomeCf()),
+                  MaterialPageRoute(
+                    builder: (context) => PaymentSuccessPage(
+                      orderId: orderId,
+                      totalAmount: totalAmount,
+                      orderDateTime: DateTime.now(), // Thêm orderDateTime ở đây
+                    ),
+                  ),
                       (Route<dynamic> route) => false,
                 );
               },
             ),
+
           ],
         );
       },
     );
   }
+
 }
 
