@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/Update_history/update.dart';
 import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
 import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
@@ -134,6 +135,7 @@ class ShoppingCartPage extends StatelessWidget {
   }
 
   void hienthiDiaLog(BuildContext context, SP_Controller controller, double totalAmount) {
+    TransactionStore transactionStore = TransactionStore();
     // Tạo mã số ngẫu nhiên
     var random = Random();
     int orderId = random.nextInt(1000000); // Mã số ngẫu nhiên trong khoảng từ 0 đến 999999
@@ -148,9 +150,18 @@ class ShoppingCartPage extends StatelessWidget {
             TextButton(
               child: Text('Hủy'),
               onPressed: () {
+                // Thêm giao dịch vào lịch sử với trạng thái "thất bại"
+                TransactionItem newTransaction = TransactionItem(
+                  date: DateTime.now().toString(), // Lấy ngày hiện tại
+                  description: 'Thanh toán thất bại',
+                  amount: '0',
+                  status: 'Thất bại',
+                );
+                transactionStore.addTransaction(newTransaction);
                 Navigator.of(context).pop();
               },
             ),
+
             TextButton(
               child: Text('Xác nhận'),
               onPressed: () {

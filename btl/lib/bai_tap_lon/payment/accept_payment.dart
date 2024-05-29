@@ -21,12 +21,15 @@ class PaymentSuccessPage extends StatelessWidget {
       status: 'Hoàn tất',
     );
 
+    // Thêm giao dịch mới vào store
+    TransactionStore().addTransaction(newTransaction);
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Image.asset("asset/images/tich.png"), // Uncomment and provide the correct path to the success image
+            Image.asset("asset/images/tich.png"), // Uncomment and provide the correct path to the success image
             SizedBox(height: 20),
             Text(
               'Đặt hàng thành công',
@@ -83,7 +86,8 @@ class PaymentSuccessPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => HistoryShopping(transactions: [newTransaction]))
+                          MaterialPageRoute(builder: (context) =>
+                              HistoryShopping(transactions: TransactionStore().getTransactions()))
                       );
                     },
                     style: ButtonStyle(
@@ -100,3 +104,25 @@ class PaymentSuccessPage extends StatelessWidget {
     );
   }
 }
+
+
+class TransactionStore {
+  static final TransactionStore _instance = TransactionStore._internal();
+  List<TransactionItem> transactions = [];
+
+  factory TransactionStore() {
+    return _instance;
+  }
+
+  TransactionStore._internal();
+
+  void addTransaction(TransactionItem transaction) {
+    transactions.add(transaction);
+  }
+
+  List<TransactionItem> getTransactions() {
+    return transactions;
+  }
+
+}
+

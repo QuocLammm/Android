@@ -1,18 +1,15 @@
-
+import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
+import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import lớp lưu trữ giao dịch
 
 class PageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
-    //final SP_Controller controller = Get.find<SP_Controller>();
     String displayName = user != null ? _getUserDisplayName(user.email!) : "Tên người dùng";
     return Scaffold(
-
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -68,12 +65,14 @@ class PageProfile extends StatelessWidget {
             leading: _buildIcon(Icons.shopping_bag_sharp),
             title: Text("Lịch sử mua hàng"),
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => HistoryShopping(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HistoryShopping(
+                    transactions: TransactionStore().getTransactions(), // Lấy danh sách giao dịch
+                  ),
+                ),
+              );
             },
             trailing: _buildTrailingIcon(),
           ),
