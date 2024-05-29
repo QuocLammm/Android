@@ -145,7 +145,7 @@ class ShoppingCartPage extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Xác nhận thanh toán'),
-          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.'),
+          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(3)} vnđ.'),
           actions: <Widget>[
             TextButton(
               child: Text('Hủy'),
@@ -154,14 +154,20 @@ class ShoppingCartPage extends StatelessWidget {
                 TransactionItem newTransaction = TransactionItem(
                   date: DateTime.now().toString(), // Lấy ngày hiện tại
                   description: 'Thanh toán thất bại',
-                  amount: '0',
+                  amount: '${totalAmount.toStringAsFixed(3)} vnđ.',
                   status: 'Thất bại',
                 );
-                transactionStore.addTransaction(newTransaction);
-                Navigator.of(context).pop();
+                TransactionStore().addTransaction(newTransaction);
+                // Chuyển hướng tới trang HistoryShopping và truyền danh sách giao dịch
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HistoryShopping(
+                      transactions: TransactionStore().getTransactions(),
+                    ),
+                  ),
+                );
               },
             ),
-
             TextButton(
               child: Text('Xác nhận'),
               onPressed: () {
