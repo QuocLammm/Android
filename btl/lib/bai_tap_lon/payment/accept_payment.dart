@@ -1,25 +1,32 @@
 import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Thư viện để định dạng ngày giờ
+import 'package:intl/intl.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   final int orderId;
   final double totalAmount;
-  final DateTime orderDateTime; // Thêm thuộc tính cho ngày giờ
+  final DateTime orderDateTime;
 
   PaymentSuccessPage({required this.orderId, required this.totalAmount, required this.orderDateTime});
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(orderDateTime); // Định dạng ngày giờ
+    String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(orderDateTime);
+    String amount = totalAmount.toStringAsFixed(0) + ' vnđ';
+    TransactionItem newTransaction = TransactionItem(
+      date: formattedDate,
+      description: 'Đơn hàng $orderId',
+      amount: amount,
+      status: 'Hoàn tất',
+    );
 
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Image.asset("asset/images/tich.png"), // Đường dẫn hình ảnh thành công
+            //Image.asset("asset/images/tich.png"), // Uncomment and provide the correct path to the success image
             SizedBox(height: 20),
             Text(
               'Đặt hàng thành công',
@@ -36,7 +43,7 @@ class PaymentSuccessPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text('Tổng số tiền thanh toán: ${totalAmount.toStringAsFixed(0)} vnđ'),
+              child: Text('Tổng số tiền thanh toán: $amount'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -62,27 +69,25 @@ class PaymentSuccessPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => PageHomeCf(),)
+                          MaterialPageRoute(builder: (context) => PageHomeCf())
                       );
-                      // Xử lý khi nhấn nút "Tiếp tục mua sắm"
                     },
                     child: Text('Tiếp tục mua sắm'),
                   ),
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red), // Viền màu đỏ
+                    border: Border.all(color: Colors.red),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // Xử lý khi nhấn nút "Lịch sử đơn hàng"
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => HistoryShopping(),)
+                          MaterialPageRoute(builder: (context) => HistoryShopping(transactions: [newTransaction]))
                       );
                     },
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.red), // Chữ màu đỏ
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     child: Text('Lịch sử đơn hàng'),
                   ),
