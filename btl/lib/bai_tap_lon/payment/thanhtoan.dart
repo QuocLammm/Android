@@ -136,36 +136,30 @@ class ShoppingCartPage extends StatelessWidget {
 
   void hienthiDiaLog(BuildContext context, SP_Controller controller, double totalAmount) {
     TransactionStore transactionStore = TransactionStore();
-    // Tạo mã số ngẫu nhiên
+    // Generate a random order ID
     var random = Random();
-    int orderId = random.nextInt(1000000); // Mã số ngẫu nhiên trong khoảng từ 0 đến 999999
+    int orderId = random.nextInt(1000000); // Random order ID between 0 and 999999
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Xác nhận thanh toán'),
-          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(3)} vnđ.'),
+          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.'),
           actions: <Widget>[
             TextButton(
               child: Text('Hủy'),
               onPressed: () {
-                // Thêm giao dịch vào lịch sử với trạng thái "thất bại"
+                // Add transaction to history with "Thất bại" status
                 TransactionItem newTransaction = TransactionItem(
-                  date: DateTime.now().toString(), // Lấy ngày hiện tại
+                  date: DateTime.now().toString(), // Get the current date
                   description: 'Thanh toán thất bại',
-                  amount: '${totalAmount.toStringAsFixed(3)} vnđ.',
+                  amount: '${totalAmount.toStringAsFixed(0)} vnđ.',
                   status: 'Thất bại',
                 );
-                TransactionStore().addTransaction(newTransaction);
-                // Chuyển hướng tới trang HistoryShopping và truyền danh sách giao dịch
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HistoryShopping(
-                      transactions: TransactionStore().getTransactions(),
-                    ),
-                  ),
-                );
+                transactionStore.addTransaction(newTransaction);
+                // Dismiss the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
@@ -178,19 +172,17 @@ class ShoppingCartPage extends StatelessWidget {
                     builder: (context) => PaymentSuccessPage(
                       orderId: orderId,
                       totalAmount: totalAmount,
-                      orderDateTime: DateTime.now(), // Thêm orderDateTime ở đây
+                      orderDateTime: DateTime.now(), // Add orderDateTime here
                     ),
                   ),
                       (Route<dynamic> route) => false,
                 );
               },
             ),
-
           ],
         );
       },
     );
   }
-
 }
 

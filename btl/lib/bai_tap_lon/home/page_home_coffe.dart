@@ -95,7 +95,17 @@ class _PageHomeCfState extends State<PageHomeCf> {
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
         title: Text(pageTitles[index]), // tên người dùng
-        leading: Icon(Icons.sailing), // Hình ảnh avt
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0), // Optional padding for better visual
+          child: ClipOval(
+            child: Image.asset(
+              "asset/images/1.jpg", // Hình ảnh avt
+              fit: BoxFit.cover,
+              width: 40, // Adjust size as needed
+              height: 40, // Adjust size as needed
+            ),
+          ),
+        ),
         actions: [
           Row(
             children: [
@@ -203,7 +213,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
   }
 
   Widget _buildSettingsPage() {
-    return PageSetting();
+    return SettingsPage();
   }
 
   Widget _buildNotificationsPage() {
@@ -552,7 +562,6 @@ class _BestsellerViewPagerState extends State<BestsellerViewPager> {
         ),
       ),
     );
-     // Placeholder
+    // Placeholder
   }
 }
-

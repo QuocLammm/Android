@@ -3,6 +3,7 @@ import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Fruit{
   String id;
@@ -454,3 +455,66 @@ class GioHangItemJ{
   GioHangItemJ({required this.juices,required this.sluongJ});
 }
 
+///////////////////////Address
+
+class Address {
+  late String id;
+  String name;
+  String phone;
+  String address;
+  String note;
+  bool? isDefault;
+
+  Address({
+    required this.name,
+    required this.phone,
+    required this.address,
+    required this.note,
+    this.isDefault,
+  });
+
+  // Convert Address object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'phone': phone,
+      'address': address,
+      'note': note,
+      'isDefault': isDefault,
+    };
+  }
+
+  // Create Address object from JSON
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      name: json['name'],
+      phone: json['phone'],
+      address: json['address'],
+      note: json['note'],
+      isDefault: json['isDefault'],
+    );
+  }
+
+  // Save address data to Firestore
+  static Future<DocumentReference> addAddress(Address address) async {
+    return FirebaseFirestore.instance.collection("Addresses").add(address.toJson());
+  }
+
+  // Update address data in Firestore
+  static Future<void> updateAddress(Address address) async {
+    return FirebaseFirestore.instance.collection("Addresses").doc(address.id).update(address.toJson());
+  }
+
+  // Delete address data from Firestore
+  static Future<void> deleteAddress(String id) async {
+    return FirebaseFirestore.instance.collection("Addresses").doc(id).delete();
+  }
+
+  // Get all addresses from Firestore
+  static Stream<List<Address>> getAllAddresses() {
+    return FirebaseFirestore.instance.collection("Addresses")
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Address.fromJson(doc.data())).toList());
+  }
+
+}
