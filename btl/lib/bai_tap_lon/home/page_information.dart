@@ -1,7 +1,9 @@
 import 'package:btl/bai_tap_lon/Update_history/history.dart';
+import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
 import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
 import 'package:btl/bai_tap_lon/security/baomat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import lớp lưu trữ giao dịch
 
@@ -9,7 +11,6 @@ class PageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
-    String displayName = user != null ? _getUserDisplayName(user.email!) : "Tên người dùng";
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,17 +25,47 @@ class PageProfile extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          Column(
-            children: [
-              Text(
-                displayName,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                user != null ? user.email! : "Email",
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ],
+          FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance.collection('users').doc(user?.uid).get(),
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text("Đã xảy ra lỗi: ${snapshot.error}");
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+
+              if (!snapshot.hasData || !snapshot.data!.exists) {
+                return Text("Không có dữ liệu");
+              }
+
+              final MyUser userinfor = MyUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+              return Column(
+                children: [
+                  Text(
+                    userinfor.hoTen,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    userinfor.email,
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.phone),
+                      Text(
+
+                        userinfor.sdt,
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
           ),
           SizedBox(height: 20),
           SizedBox(

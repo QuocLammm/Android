@@ -4,7 +4,71 @@ import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+class MyUser{
+  String hoTen;
+  String email;
+  String sdt;
+  String? anh;
+  DateTime ngayTao;
+  MyUser({required this.hoTen,required this.email, required this.sdt,required this.anh, required this.ngayTao});
 
+  Map<String, dynamic> toJson() {
+    return {
+      'hoTen': this.hoTen,
+      'email': this.email,
+      'sdt': this.sdt,
+      'anh': this.anh,
+      'ngayTao': this.ngayTao,
+    };
+  }
+
+  factory MyUser.fromJson(Map<String, dynamic> map) {
+    return MyUser(
+      hoTen: map['hoTen'] as String,
+      email: map['email'] as String,
+      sdt: map['sdt'] as String,
+      anh: map['anh'] as String,
+      ngayTao: (map['ngayTao'] as Timestamp).toDate(),
+    );
+  }
+}
+class MyUserSnapshot{
+  MyUser user;
+  DocumentReference ref;
+
+  MyUserSnapshot({required this.user,required this.ref});
+  factory MyUserSnapshot.fromMap(DocumentSnapshot docSnap){
+    return MyUserSnapshot(
+        user: MyUser.fromJson(docSnap.data() as Map<String, dynamic>),
+        ref: docSnap.reference
+    );
+  }
+
+  static Future<DocumentReference> them(MyUser user) async {
+    return FirebaseFirestore.instance.collection("users").add(user.toJson());
+  }
+  Future<void> capNhat(MyUser user) async{
+    return ref.update(user.toJson());
+  }
+  Future<void> xoa() async{
+    return ref.delete();
+  }
+  //truy van theo thoi gian thuc
+  static Stream<List<MyUserSnapshot>> getAll(){
+    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("users").snapshots();
+    return sqs.map(
+            (qs) => qs.docs.map(
+                (docSnap) => MyUserSnapshot.fromMap(docSnap)
+        ).toList());
+  }
+  //truy van du lieu mot lan
+  static Future<List<MyUserSnapshot>> getAll2() async{
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("users").get();
+    return qs.docs.map(
+            (docSnap) => MyUserSnapshot.fromMap(docSnap)
+    ).toList();
+  }
+}
 class Fruit{
   String id;
   String ten;

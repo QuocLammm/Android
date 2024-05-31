@@ -1,8 +1,12 @@
 import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
+import 'package:btl/bai_tap_lon/security/baomat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:flutterfire_ui/auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class PageLogin extends StatelessWidget {
   const PageLogin({super.key});
   Duration get loginTime => const Duration(milliseconds: 2250);
@@ -26,12 +30,25 @@ class PageLogin extends StatelessWidget {
     }
   }
 
+
   Future<String?> _signupUser(SignupData data) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final additionalSignupData = data.additionalSignupData;
+      String hoTen = additionalSignupData?['hoTen'] ?? '';
+      String sdt = additionalSignupData?['sdt'] ?? '';
+
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: data.name!,
         password: data.password!,
       );
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+        'email': data.name,
+        'hoTen': hoTen,
+        'sdt': sdt,
+        'role': 'user',
+        'ngayTao': FieldValue.serverTimestamp(),
+        'anh': '', // Placeholder for profile picture
+      });
       return null; // return null if signup is successful
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -57,12 +74,13 @@ class PageLogin extends StatelessWidget {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlutterLogin(
         title: 'Hello!',
-        //logo: const AssetImage('assets/images/ecorp-lightblue.png') //them anh neu thich,
+        //logo: const AssetImage('assets/images/ecorp-lightblue.png'), // Add a logo if you like
         onLogin: _authUser,
         onSignup: _signupUser,
         loginProviders: [
@@ -87,10 +105,40 @@ class PageLogin extends StatelessWidget {
             },
           ),
         ],
-        onSubmitAnimationCompleted: () {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const PageHomeCf(),
-          ));
+        additionalSignupFields: [
+          UserFormField(
+            keyName: 'hoTen',
+            displayName: 'Họ và tên',
+            icon: Icon(Icons.person),
+          ),
+          UserFormField(
+            keyName: 'sdt',
+            displayName: 'Số điện thoại',
+            icon: Icon(Icons.phone),
+            userType: LoginUserType.phone
+          ),
+        ],
+        onSubmitAnimationCompleted: () async {
+          User? user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .get();
+
+            if (userDoc.exists) {
+              String role = userDoc.get('role');
+              if (role == 'admin') {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => PageSecurity()),
+                );
+              } else {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => PageHomeCf()),
+                );
+              }
+            }
+          }
         },
         onRecoverPassword: _recoverPassword,
         messages: LoginMessages(
@@ -108,7 +156,6 @@ class PageLogin extends StatelessWidget {
           recoverPasswordSuccess: 'Mật khẩu đã được khôi phục thành công',
           recoverPasswordIntro: 'Lấy lại mật khẩu ở đây',
           providersTitleFirst: 'Hoặc',
-
         ),
       ),
     );
