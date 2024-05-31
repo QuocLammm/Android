@@ -17,13 +17,26 @@ class PageProfile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 20),
-          Container(
-            width: 120,
-            height: 120,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.asset("asset/images/1.jpg"),
-            ),
+          Stack(
+            children: [
+              ClipOval(
+                child: Container(
+                  width: 128,
+                  height: 128,
+                  color: Colors.transparent,
+                  child: Image.asset("asset/images/default_avatar.png"),
+                ),
+              ),
+              Positioned(
+                  child: IconButton(
+                    onPressed: selectImage,
+                    icon: Icon(Icons.add_a_photo),
+                  ),
+                bottom: -10,
+                left: 80,
+              )
+
+            ],
           ),
           SizedBox(height: 20),
           FutureBuilder<DocumentSnapshot>(
@@ -48,18 +61,13 @@ class PageProfile extends StatelessWidget {
                     userinfor.hoTen,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    userinfor.email,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.phone),
+                      Icon(Icons.mail),
+                      SizedBox(width: 10,),
                       Text(
-
-                        userinfor.sdt,
+                        userinfor.email,
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ],
@@ -173,7 +181,9 @@ class PageProfile extends StatelessWidget {
       child: Icon(iconData, color: Colors.white),
     );
   }
+  selectImage(){
 
+  }
   Widget _buildTrailingIcon() {
     return Container(
       width: 40,
