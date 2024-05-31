@@ -1,3 +1,4 @@
+import 'package:btl/bai_tap_lon/admin/page_home_admin.dart';
 import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
 import 'package:btl/bai_tap_lon/security/baomat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -130,7 +131,8 @@ class PageLogin extends StatelessWidget {
               String role = userDoc.get('role');
               if (role == 'admin') {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => PageSecurity()),
+                  //Đăng nhập dưới dạng Admin
+                  MaterialPageRoute(builder: (context) => PageHomeAdmin()),
                 );
               } else {
                 Navigator.of(context).pushReplacement(

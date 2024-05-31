@@ -2,6 +2,7 @@ import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
 import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
+import 'package:btl/bai_tap_lon/profile/edit_profile_user.dart';
 import 'package:btl/bai_tap_lon/security/baomat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,9 @@ class PageProfile extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // Chỉnh sửa profile
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PageEditProflie()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow,
@@ -89,6 +93,7 @@ class PageProfile extends StatelessWidget {
             leading: _buildIcon(Icons.wallet),
             title: Text("Ví của tôi"),
             onTap: () {
+
               // Xử lý ví của tôi
             },
             trailing: _buildTrailingIcon(),
