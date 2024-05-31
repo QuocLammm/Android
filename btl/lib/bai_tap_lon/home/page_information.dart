@@ -1,6 +1,7 @@
 import 'package:btl/bai_tap_lon/Update_history/history.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
 import 'package:btl/bai_tap_lon/payment/accept_payment.dart';
+import 'package:btl/bai_tap_lon/security/baomat.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import lớp lưu trữ giao dịch
 
@@ -80,8 +81,14 @@ class PageProfile extends StatelessWidget {
             leading: _buildIcon(Icons.settings),
             title: Text("Bảo mật"),
             onTap: () {
-              // Xử lý bảo mật
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PageSecurity(),
+                ),
+              );
             },
+
             trailing: _buildTrailingIcon(),
           ),
           SizedBox(height: 40),
