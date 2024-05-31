@@ -466,6 +466,7 @@ class Address {
   bool? isDefault;
 
   Address({
+    this.id = '',
     required this.name,
     required this.phone,
     required this.address,
@@ -485,8 +486,9 @@ class Address {
   }
 
   // Create Address object from JSON
-  factory Address.fromJson(Map<String, dynamic> json) {
+  factory Address.fromJson(Map<String, dynamic> json, String id) {
     return Address(
+      id: id,
       name: json['name'],
       phone: json['phone'],
       address: json['address'],
@@ -514,7 +516,6 @@ class Address {
   static Stream<List<Address>> getAllAddresses() {
     return FirebaseFirestore.instance.collection("Addresses")
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => Address.fromJson(doc.data())).toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Address.fromJson(doc.data() as Map<String, dynamic>, doc.id)).toList());
   }
-
 }

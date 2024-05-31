@@ -1,195 +1,137 @@
-import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:flutter/material.dart';
-import 'package:btl/bai_tap_lon/settings/create_address.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:btl/bai_tap_lon/firebase/model.dart';
 
-class DeliveryAddressPage extends StatefulWidget {
+class UpdateAddress extends StatefulWidget {
+  final Address address;
+
+  const UpdateAddress({Key? key, required this.address}) : super(key: key);
+
   @override
-  _DeliveryAddressPageState createState() => _DeliveryAddressPageState();
+  _UpdateAddressState createState() => _UpdateAddressState();
 }
 
-class _DeliveryAddressPageState extends State<DeliveryAddressPage> {
-  // List to hold addresses
-  List<Address> addresses = [];
+class _UpdateAddressState extends State<UpdateAddress> {
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
+  late TextEditingController _addressController;
+  late TextEditingController _noteController;
+  late bool isDefaultAddress;
 
   @override
   void initState() {
     super.initState();
-    loadAddresses();
+    _nameController = TextEditingController(text: widget.address.name);
+    _phoneController = TextEditingController(text: widget.address.phone);
+    _addressController = TextEditingController(text: widget.address.address);
+    _noteController = TextEditingController(text: widget.address.note);
+    isDefaultAddress = widget.address.isDefault?? false;
   }
-
-  // Hàm để tải dữ liệu địa chỉ từ Firestore
-  void loadAddresses() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('Addresses').get();
-      setState(() {
-        addresses = querySnapshot.docs
-            .map((doc) => Address.fromJson(doc.data() as Map<String, dynamic>))
-            .toList();
-      });
-
-      // Log để kiểm tra dữ liệu đã được tải thành công hay không
-      print('Loaded addresses: $addresses');
-    } catch (e) {
-      print('Error loading addresses: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Đã xảy ra lỗi khi tải danh sách địa chỉ'),
-        ),
-      );
-    }
-  }
-
-  void saveAddress(Address address) async {
-    try {
-      // Thêm địa chỉ mới vào Firestore và nhận về ID của tài liệu được thêm
-      DocumentReference docRef = await FirebaseFirestore.instance.collection('Addresses').add(address.toJson());
-      // Cập nhật ID của địa chỉ mới trong danh sách địa chỉ local
-      address.id = docRef.id;
-      // Thêm địa chỉ mới vào danh sách địa chỉ local để hiển thị ngay lập tức
-      setState(() {
-        addresses.add(address);
-      });
-      // Hiển thị thông báo Snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Địa chỉ mới đã được thêm'),
-        ),
-      );
-    } catch (e) {
-      print('Error saving address: $e');
-      // Hiển thị thông báo Snackbar nếu có lỗi xảy ra
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Đã xảy ra lỗi khi thêm địa chỉ mới $e'),
-        ),
-      );
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Địa chỉ giao hàng',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.red,
+        title: Text('Cập nhật địa chỉ'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: ListView.builder(
-                    itemCount: addresses.length,
-                    itemBuilder: (context, index) {
-                      Address address = addresses[index];
-                      return Column(
-                        children: [
-                          AddressWidget(address: address),
-                        ],
-                      );
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Họ và tên',
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'Số điện thoại',
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _addressController,
+                decoration: InputDecoration(
+                  labelText: 'Địa chỉ',
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _noteController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  labelText: 'Lưu ý',
+                  hintText: 'Nhập lưu ý...',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Text('Đặt làm địa chỉ mặc định'),
+                  Switch(
+                    value: isDefaultAddress,
+                    onChanged: (value) {
+                      setState(() {
+                        isDefaultAddress = value;
+                      });
                     },
                   ),
-                ),
+                ],
               ),
-            ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.red,
-                ),
-                child: TextButton(
-                  onPressed: () async {
-                    List<Address>? result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddNewAddressPage()),
-                    );
+              SizedBox(height: 20),
+              TextButton(
+                onPressed: () async {
+                  // Tạo một đối tượng Address từ các thông tin nhập vào
+                  Address updatedAddress = Address(
+                    id: widget.address.id,
+                    name: _nameController.text,
+                    phone: _phoneController.text,
+                    address: _addressController.text,
+                    note: _noteController.text,
+                    isDefault: isDefaultAddress,
+                  );
 
-                    if (result != null && result.isNotEmpty) {
-                      setState(() {
-                        Address newAddress = result.first;
-                        saveAddress(newAddress); // Save the new address to Firestore
-                        //addresses.add(newAddress);
-                        //
-                        loadAddresses();
+                  // Thực hiện cập nhật địa chỉ trong Firebase
+                  await Address.updateAddress(updatedAddress);
 
-
-                      });
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                    child: Text(
-                      'Thêm địa chỉ mới',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  // Đóng trang và hiển thị thông báo Snackbar
+                  Navigator.pop(context, updatedAddress);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Địa chỉ đã được cập nhật'),
                     ),
+                  );
+                },
+                child: Text(
+                  'Lưu địa chỉ',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AddressWidget extends StatelessWidget {
-  final Address address;
-
-  const AddressWidget({Key? key, required this.address}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red,
-                ),
-                padding: EdgeInsets.all(8),
-                child: Icon(Icons.home, color: Colors.white),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(address.name),
-                    Text(address.address),
-                  ],
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue,
                 ),
               ),
             ],
           ),
         ),
-        Divider(height: 1, thickness: 1),
-      ],
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _noteController.dispose();
+    super.dispose();
   }
 }

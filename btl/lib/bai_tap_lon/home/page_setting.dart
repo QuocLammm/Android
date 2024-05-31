@@ -1,6 +1,6 @@
-import 'package:btl/bai_tap_lon/settings/update_address.dart';
+import 'package:btl/bai_tap_lon/settings/page_address.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class SettingsPage extends StatelessWidget {
   @override
