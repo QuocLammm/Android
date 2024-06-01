@@ -14,8 +14,6 @@ class ShoppingCartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping Cart'),
-        backgroundColor: Colors.redAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -79,6 +77,7 @@ class ShoppingCartPage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 30,)
           ],
         ),
       ),

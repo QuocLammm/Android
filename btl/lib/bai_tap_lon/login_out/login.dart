@@ -31,13 +31,23 @@ class PageLogin extends StatelessWidget {
     }
   }
 
+  Future<bool> _checkDuplicatePhoneNumber(String phoneNumber) async {
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('sdt', isEqualTo: phoneNumber)
+        .get();
 
+    return query.docs.isNotEmpty;
+  }
   Future<String?> _signupUser(SignupData data) async {
     try {
       final additionalSignupData = data.additionalSignupData;
       String hoTen = additionalSignupData?['hoTen'] ?? '';
       String sdt = additionalSignupData?['sdt'] ?? '';
-
+      bool isDuplicate = await _checkDuplicatePhoneNumber(sdt);
+      if (isDuplicate) {
+        return 'Số điện thoại đã được sử dụng';
+      }
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: data.name!,
         password: data.password!,

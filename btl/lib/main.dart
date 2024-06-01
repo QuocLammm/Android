@@ -1,3 +1,4 @@
+import 'package:btl/bai_tap_lon/firebase/cotrollers.dart';
 import 'package:btl/bai_tap_lon/firebase/widget_connect_firebase.dart';
 import 'package:btl/bai_tap_lon/home/page_home_full.dart';
 import 'package:btl/bai_tap_lon/login_out/login.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
+  Get.put(SP_Controller());
   runApp(const MyApp());
 }
 

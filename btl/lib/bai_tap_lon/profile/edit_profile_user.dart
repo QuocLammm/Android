@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:btl/bai_tap_lon/firebase/storage_image_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -187,6 +188,27 @@ class _PageEditProfileState extends State<PageEditProfile> {
       ),
     );
   }
+  Future<bool> checkDuplicatePhoneNumber(String phoneNumber) async {
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('sdt', isEqualTo: phoneNumber)
+        .get();
+    if (query.docs.isNotEmpty) {
+      for (var doc in query.docs) {
+        var data = doc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('sdt')) {
+          if (data['sdt'] == phoneNumber && doc.id != widget.userSnapshot.user.sdt) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+
+
+
   _capNhatUser(MyUser user){
     widget.userSnapshot.capNhat(user).then(
             (value) => showMySnackBar(

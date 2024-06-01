@@ -31,14 +31,14 @@ class _PageHomeCfState extends State<PageHomeCf> {
 
   final List<IconData> iconList = [
     Icons.search,
-    Icons.notifications,
+    Icons.shopping_cart,
     Icons.account_circle_outlined,
     Icons.settings,
   ];
 
   final List<String> pageTitles = [
     "Tìm kiếm",
-    "Thông báo",
+    "Giỏ hàng của tôi",
     "Thông tin cá nhân",
     "Cài đặt",
     "Trang chủ",
@@ -136,43 +136,40 @@ class _PageHomeCfState extends State<PageHomeCf> {
         ),
         actions: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: 7,
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0.0,
-                        shadowColor: Colors.transparent,
-                        backgroundColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        _getCurrentLocation().then((value) {
-                          lat = '${value.latitude}';
-                          long = '${value.longitude}';
-                          setState(() {
-                            print(lat);
-                            print(long);
-                          });
-                          _liveLocation();
-                          _openMap(lat, long);
-                        });
-                      },
-                      child: Icon(Icons.location_on_outlined,))
-                ],
-              ), // lấy vị trí
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: badges.Badge(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ShoppingCartPage()),
-                    );// giỏ hàng
-                  },
-                  child: Icon(Icons.shopping_cart),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0.0,
+                  shadowColor: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
+                onPressed: () {
+                  _getCurrentLocation().then((value) {
+                    lat = '${value.latitude}';
+                    long = '${value.longitude}';
+                    setState(() {
+                      print(lat);
+                      print(long);
+                    });
+                    _liveLocation();
+                    _openMap(lat, long);
+                  });
+                },
+                child: Icon(Icons.location_on_outlined,color: Colors.black),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0.0,
+                  shadowColor: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PageNotification()),
+                  ); // giỏ hàng
+                },
+                child: Icon(Icons.notifications,color: Colors.black),
               ),
             ],
           ),
@@ -225,7 +222,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
       case 0:
         return _buildSearchPage();
       case 1:
-        return _buildNotificationsPage();
+        return _buildCartPage();
       case 2:
         return _buildInforPage();
       case 3:
@@ -245,8 +242,8 @@ class _PageHomeCfState extends State<PageHomeCf> {
     return SettingsPage();
   }
 
-  Widget _buildNotificationsPage() {
-    return PageNotification();
+  Widget _buildCartPage() {
+    return ShoppingCartPage();
   }
 
   Widget _buildSearchPage() {
