@@ -15,6 +15,8 @@ import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PageHomeCf extends StatefulWidget {
   const PageHomeCf({super.key});
@@ -98,11 +100,37 @@ class _PageHomeCfState extends State<PageHomeCf> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0), // Optional padding for better visual
           child: ClipOval(
-            child: Image.asset(
-              "asset/images/1.jpg", // Hình ảnh avt
-              fit: BoxFit.cover,
-              width: 40, // Adjust size as needed
-              height: 40, // Adjust size as needed
+            child: Container(
+              width: 40,
+              height: 40,
+              color: Colors.transparent,
+              child: FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Đã xảy ra lỗi: ${snapshot.error}");
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return Text("Không có dữ liệu");
+                  }
+
+                  final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
+                  final MyUser userinfor = userSnapshot.user;
+
+                  return userinfor.anh != null ? Image.network(userinfor.anh!,
+                    fit: BoxFit.cover,
+                  )
+                      : Image.asset(
+                    "asset/images/default_avatar.png",
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -118,6 +146,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
                       style: ElevatedButton.styleFrom(
                         elevation: 0.0,
                         shadowColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
                       ),
                       onPressed: () {
                         _getCurrentLocation().then((value) {
@@ -131,7 +160,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
                           _openMap(lat, long);
                         });
                       },
-                      child: Icon(Icons.location_on_outlined))
+                      child: Icon(Icons.location_on_outlined,))
                 ],
               ), // lấy vị trí
               Padding(

@@ -17,6 +17,9 @@ class DrinkCoffe extends StatelessWidget {
       appBar: AppBar(
         title: Text("Danh sách nước uống", style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),

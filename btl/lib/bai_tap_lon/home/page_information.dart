@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import lớp lưu trữ giao dịch
 
 class PageProfile extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,15 +24,41 @@ class PageProfile extends StatelessWidget {
                   width: 128,
                   height: 128,
                   color: Colors.transparent,
-                  child: Image.asset("asset/images/default_avatar.png"),
+                  child: FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("Đã xảy ra lỗi: ${snapshot.error}");
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+
+                      if (!snapshot.hasData || !snapshot.data!.exists) {
+                        return Text("Không có dữ liệu");
+                      }
+
+                      final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
+                      final MyUser userinfor = userSnapshot.user;
+
+                      return userinfor.anh != null ? Image.network(userinfor.anh!,
+                        fit: BoxFit.cover,
+                      )
+                          : Image.asset(
+                        "asset/images/default_avatar.png",
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
           ),
           SizedBox(height: 20),
           FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance.collection('users').doc(user?.uid).get(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+            builder: (context,snapshot) {
               if (snapshot.hasError) {
                 return Text("Đã xảy ra lỗi: ${snapshot.error}");
               }
@@ -71,7 +97,8 @@ class PageProfile extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         // Chỉnh sửa profile
-                        await Navigator.push(context,
+                        await Navigator.push(
+                          context,
                           MaterialPageRoute(
                             builder: (context) => PageEditProfile(
                               userSnapshot: userSnapshot,
