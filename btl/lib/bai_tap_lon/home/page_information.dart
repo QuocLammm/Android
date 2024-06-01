@@ -27,15 +27,6 @@ class PageProfile extends StatelessWidget {
                   child: Image.asset("asset/images/default_avatar.png"),
                 ),
               ),
-              Positioned(
-                  child: IconButton(
-                    onPressed: selectImage,
-                    icon: Icon(Icons.add_a_photo),
-                  ),
-                bottom: -10,
-                left: 80,
-              )
-
             ],
           ),
           SizedBox(height: 20),
@@ -54,7 +45,9 @@ class PageProfile extends StatelessWidget {
                 return Text("Không có dữ liệu");
               }
 
-              final MyUser userinfor = MyUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+              final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
+              final MyUser userinfor = userSnapshot.user;
+
               return Column(
                 children: [
                   Text(
@@ -65,35 +58,39 @@ class PageProfile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.mail),
-                      SizedBox(width: 10,),
+                      SizedBox(width: 10),
                       Text(
                         userinfor.email,
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ],
                   ),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Chỉnh sửa profile
+                        await Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => PageEditProfile(
+                              userSnapshot: userSnapshot,
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow,
+                      ),
+                      child: Text(
+                        "Chỉnh sửa",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
-          ),
-          SizedBox(height: 20),
-          SizedBox(
-            width: 200,
-            child: ElevatedButton(
-              onPressed: () {
-                // Chỉnh sửa profile
-                Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PageEditProflie()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellow,
-              ),
-              child: Text(
-                "Chỉnh sửa",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
           ),
           Divider(thickness: 1.5),
           SizedBox(height: 30),
@@ -101,7 +98,6 @@ class PageProfile extends StatelessWidget {
             leading: _buildIcon(Icons.wallet),
             title: Text("Ví của tôi"),
             onTap: () {
-
               // Xử lý ví của tôi
             },
             trailing: _buildTrailingIcon(),
@@ -132,7 +128,6 @@ class PageProfile extends StatelessWidget {
                 ),
               );
             },
-
             trailing: _buildTrailingIcon(),
           ),
           SizedBox(height: 40),
@@ -164,7 +159,7 @@ class PageProfile extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -181,9 +176,7 @@ class PageProfile extends StatelessWidget {
       child: Icon(iconData, color: Colors.white),
     );
   }
-  selectImage(){
 
-  }
   Widget _buildTrailingIcon() {
     return Container(
       width: 40,

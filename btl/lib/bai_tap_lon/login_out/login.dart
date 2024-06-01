@@ -47,8 +47,7 @@ class PageLogin extends StatelessWidget {
         'hoTen': hoTen,
         'sdt': sdt,
         'role': 'user',
-        'ngayTao': FieldValue.serverTimestamp(),
-        'anh': '', // Placeholder for profile picture
+        'anh': '',
       });
       return null; // return null if signup is successful
     } on FirebaseAuthException catch (e) {

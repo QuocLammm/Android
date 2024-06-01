@@ -9,8 +9,7 @@ class MyUser{
   String email;
   String sdt;
   String? anh;
-  DateTime ngayTao;
-  MyUser({required this.hoTen,required this.email, required this.sdt,required this.anh, required this.ngayTao});
+  MyUser({required this.hoTen,required this.email, required this.sdt,required this.anh});
 
   Map<String, dynamic> toJson() {
     return {
@@ -18,7 +17,6 @@ class MyUser{
       'email': this.email,
       'sdt': this.sdt,
       'anh': this.anh,
-      'ngayTao': this.ngayTao,
     };
   }
 
@@ -27,8 +25,7 @@ class MyUser{
       hoTen: map['hoTen'] as String,
       email: map['email'] as String,
       sdt: map['sdt'] as String,
-      anh: map['anh'] as String,
-      ngayTao: (map['ngayTao'] as Timestamp).toDate(),
+      anh: map['anh'] as String
     );
   }
 }
