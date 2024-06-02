@@ -101,7 +101,7 @@ class ShoppingCartPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color:Colors.blue),
               onPressed: () {
                 Get.to(() => PageUpdateDrink(
                   product: item is GioHangItemm ? item.dr :
@@ -114,7 +114,7 @@ class ShoppingCartPage extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red,),
               onPressed: () {
                 dynamic productToDelete;
                 if (item is GioHangItemm) {

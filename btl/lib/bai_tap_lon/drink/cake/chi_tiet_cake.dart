@@ -29,6 +29,7 @@ class _PageChiTietCakeState extends State<PageChiTietCake> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Chi tiết sản phẩm"),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           Padding(
             padding: const EdgeInsets.all(2.0),
@@ -38,43 +39,116 @@ class _PageChiTietCakeState extends State<PageChiTietCake> {
                   MaterialPageRoute(builder: (context) => ShoppingCartPage()),
                 );
               },
+              // badgeContent: Text("${controller.slhmC}"), // Show the number of items in the cart
               child: Icon(Icons.shopping_cart),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 5.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Container(
-                width: w,
+                width: (w/0.9),
                 child: Image.network(widget.cake.anh ?? "No image"),
               ),
             ),
-            SizedBox(height: 20),
-            Divider(thickness: 2.5),
+            SizedBox(height: 10),
+            Divider(thickness: 2.0),
+            SizedBox(height: 10,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 10),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.cake.ten,
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 30,fontWeight: FontWeight.bold,),
                     ),
                   ],
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(widget.cake.moTa ?? ""),
+            SizedBox(height: 10,),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Text(widget.cake.moTa ?? "",style: TextStyle(
+                  color: Colors.black.withOpacity(0.7),
+                  fontSize: 12
+              ),),
             ),
+
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 150,
+                  height: 70,
+
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    /*border: Border.all(color: Colors.black),*/
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (_quantity > 1) _quantity--;
+                          });
+                        },
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: Colors.grey.shade900,
+                          child: Icon(Icons.remove,color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        '$_quantity',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            _quantity++;
+                          });
+                        },
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: Colors.grey.shade900,
+                          child: Icon(Icons.add,color: Colors.white,),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                      color: Colors.deepOrange,
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Text(
+                    "${price} vnđ",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -85,9 +159,13 @@ class _PageChiTietCakeState extends State<PageChiTietCake> {
                   allowHalfRating: true,
                   itemCount: 5,
                   itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
+                  itemBuilder: (context, _) => SizedBox(
+                    width: 30, // Adjust the width and height as needed
+                    height: 30,
+                    child: Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
                   ),
                   onRatingUpdate: (rating) {
                     setState(() {
@@ -98,104 +176,68 @@ class _PageChiTietCakeState extends State<PageChiTietCake> {
                 SizedBox(width: 10),
               ],
             ),
-            SizedBox(height: 10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+
+            Spacer(),
+            Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Text(
-                  "${price} vnđ",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.yellowAccent,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      )
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Row(
+
+                      ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.grey.shade900
+                              ),
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(double.infinity,70)
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0)
+                                  )
+                              )
+                          ),
+                          onPressed: () {
+                            final controller = Get.find<SP_Controller>();
+                            controller.themvaoCake(widget.cake, _quantity);
+                          },
+                          child: Text("Thêm vào giỏ hàng",style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+
+                          ),)),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                if (_quantity > 1) _quantity--;
-                              });
-                            },
-                            icon: Icon(Icons.remove),
-                          ),
                           Text(
-                            '$_quantity',
-                            style: TextStyle(fontSize: 20),
+                            "TỔNG TIỀN: ",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _quantity++;
-                              });
-                            },
-                            icon: Icon(Icons.add),
-                          ),
+                          Text("${price * _quantity} vnđ",style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.red
+                          ),),
                         ],
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Tổng Tiền: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
-                        ),
-                        Text("${price * _quantity} vnđ"),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            final controller = Get.find<SP_Controller>();
-                            controller.themvaoCake(widget.cake, _quantity); // Navigate to the cart page
-                          },
-                          icon: Icon(Icons.add_shopping_cart, color: Colors.purple),
-                        )
-                      ],
-                    ),
-                  ),
                 )
               ],
+
             ),
             SizedBox(height: 10),
           ],
