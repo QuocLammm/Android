@@ -5,22 +5,27 @@ import 'package:get/get.dart';
 
 import '../firebase/model.dart';
 
-class PageQLySanPham extends StatelessWidget {
+class PageQLySanPham extends StatefulWidget {
   final List<dynamic> products;
 
   PageQLySanPham({required this.products, super.key});
 
   @override
+  State<PageQLySanPham> createState() => _PageQLySanPhamState();
+}
+
+class _PageQLySanPhamState extends State<PageQLySanPham> {
+  @override
   Widget build(BuildContext context) {
-    final dynamic type = products.first;
+    final dynamic type = widget.products.first;
     return Scaffold(
       appBar: AppBar(
         title: Text("Danh sách sản phẩm"),
       ),
       body: ListView.builder(
-        itemCount: products.length,
+        itemCount: widget.products.length,
         itemBuilder: (context, index) {
-          dynamic sp = products[index];
+          dynamic sp = widget.products[index];
           String? anh;
           String? tensp;
           int? gia;
@@ -104,8 +109,18 @@ class PageQLySanPham extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        // Handle delete action
+                      onPressed: () async {
+                        if (sp is DrinkSnapshot) {
+                          await sp.xoaD(sp.ref);
+                        } else if (sp is DrinkTeaSnapshot) {
+                          await sp.xoaDT(sp.ref);
+                        } else if (sp is CakeSnapshot) {
+                          await sp.xoaDTCake(sp.ref);
+                        } else if (sp is JuiceSnapshot) {
+                          await sp.xoaDTJuice(sp.ref);
+                        }
+                        // Cập nhật lại giao diện sau khi xóa dữ liệu
+                        setState(() {});
                       },
                       icon: Icon(
                         Icons.delete,
@@ -113,6 +128,8 @@ class PageQLySanPham extends StatelessWidget {
                         size: 32.0,
                       ),
                     ),
+
+
                   ],
                 ),
               ),

@@ -201,8 +201,8 @@ class CakeSnapshot{
   }
 
   //Xóa dữ liệu
-  Future<void> xoaDTCake() async{
-    return ref.delete();
+  Future<void> xoaDTCake(DocumentReference reference) async{
+    return reference.delete();
   }
 
   //Truy vấn dữ liệu theo thời gian thực
@@ -282,8 +282,8 @@ class DrinkSnapshot{
   }
 
   //Xóa dữ liệu
-  Future<void> xoaD() async{
-    return ref.delete();
+  Future<void> xoaD(DocumentReference reference) async{
+    return reference.delete();
   }
 
   //Truy vấn dữ liệu theo thời gian thực
@@ -363,8 +363,8 @@ class DrinkTeaSnapshot{
   }
 
   //Xóa dữ liệu
-  Future<void> xoaDT() async{
-    return ref.delete();
+  Future<void> xoaDT(DocumentReference reference) async{
+    return reference.delete();
   }
 
   //Truy vấn dữ liệu theo thời gian thực
@@ -443,8 +443,8 @@ class JuiceSnapshot{
   }
 
   //Xóa dữ liệu
-  Future<void> xoaDTJuice() async{
-    return ref.delete();
+  Future<void> xoaDTJuice(DocumentReference reference) async{
+    return reference.delete();
   }
 
   //Truy vấn dữ liệu theo thời gian thực
