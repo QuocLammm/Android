@@ -14,11 +14,9 @@ class ShoppingCartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Giỏ hàng"),
-        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(right:10.0,left: 10.0,bottom: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
