@@ -146,7 +146,7 @@ class PageProfile extends StatelessWidget {
           ),
           ListTile(
             leading: _buildIcon(Icons.settings),
-            title: Text("Bảo mật"),
+            title: Text("Thay đổi mật khẩu"),
             onTap: () {
               Navigator.push(
                 context,
