@@ -122,7 +122,10 @@ class FruitSnapshot{
   Future<void> xoa() async{
     return ref.delete();
   }
-
+  static Future<List<FruitSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Fruits").get();
+    return qs.docs.map((docSnap) => FruitSnapshot.fromMap(docSnap)).toList();
+  }
   //Truy vấn dữ liệu theo thời gian thực
   static Stream<List<FruitSnapshot>> getAll(){
     Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Fruits").snapshots();
@@ -131,6 +134,7 @@ class FruitSnapshot{
                 (docSnap) => FruitSnapshot.fromMap(docSnap)
         ).toList()
     );
+
   }
 
   //Truy vấn dữ liệu một lần
@@ -141,194 +145,6 @@ class FruitSnapshot{
     ).toList();
   }
 }
-
-
-class GioHangItem{
-  Fruit f;
-  int soLuong;
-
-  GioHangItem({required this.f,required this.soLuong});
-}
-
-////////////////////////////////Coffee///////////////////
-class Drink{
-  String id;
-  String ten;
-  String? anh;
-  int gia;
-  String? moTa;
-  Drink({required this.id,required this.ten, required this.anh, required this.gia,this.moTa});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': this.id,
-      'ten': this.ten,
-      'anh': this.anh,
-      'gia': this.gia,
-      'moTa': this.moTa,
-    };
-  }
-
-  factory Drink.fromJson(Map<String, dynamic> map) {
-    return Drink(
-      id: map['id'] as String,
-      ten: map['ten'] as String,
-      anh: map['anh'] as String,
-      gia: map['gia'] as int,
-      moTa: map['moTa'] as String,
-    );
-  }
-}
-
-//Lớp truy cập dữ liệu
-class DrinkSnapshot{
-  Drink drink; // biến vị trí của document trên firebase_storage
-  DocumentReference ref;
-
-  DrinkSnapshot({required this.drink,required this.ref});
-
-  factory DrinkSnapshot.fromMap(DocumentSnapshot docSnap){
-    return DrinkSnapshot(
-        drink: Drink.fromJson(docSnap.data() as Map<String, dynamic>), // ép kiểu
-        ref: docSnap.reference
-    );
-  }
-
-  static Future<DocumentReference> themD(Fruit fruit) async {
-    return FirebaseFirestore.instance.collection("DrinkCoffee").add(fruit.toJson());
-  }
-
-  //Cập nhật dữ liệu
-  Future<void> capNhatD(Fruit fruit) async{
-    return ref.update(fruit.toJson());
-  }
-
-  //Xóa dữ liệu
-  Future<void> xoaD() async{
-    return ref.delete();
-  }
-
-  //Truy vấn dữ liệu theo thời gian thực
-  static Stream<List<DrinkSnapshot>> getAll(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("DrinkCoffee")
-        .snapshots();
-    return sqs.map(
-            (qs) => qs.docs.map(
-                (docSnap) => DrinkSnapshot.fromMap(docSnap)).toList()
-    );
-  }
-
-  //
-  static Future<List<DrinkSnapshot>> getAllOnce() async {
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
-    return qs.docs.map((docSnap) => DrinkSnapshot.fromMap(docSnap)).toList();
-  }
-
-  //Truy vấn dữ liệu một lần
-  static Future<List<DrinkSnapshot>> getAll2() async{
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
-    return qs.docs.map(
-            (docSnap) => DrinkSnapshot.fromMap(docSnap)
-    ).toList();
-  }
-}
-
-
-class GioHangItemm{
-  Drink dr;
-  int sluongCF;
-
-  GioHangItemm({required this.dr,required this.sluongCF});
-}
-
-///////////////////////Tea////////////////////////
-class DrinkTea{
-  String id;
-  String ten;
-  String? anh;
-  int gia;
-  String? moTa;
-  DrinkTea({required this.id,required this.ten, required this.anh, required this.gia,this.moTa});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': this.id,
-      'ten': this.ten,
-      'anh': this.anh,
-      'gia': this.gia,
-      'moTa': this.moTa,
-    };
-  }
-
-  factory DrinkTea.fromJson(Map<String, dynamic> map) {
-    return DrinkTea(
-      id: map['id'] as String,
-      ten: map['ten'] as String,
-      anh: map['anh'] as String,
-      gia: map['gia'] as int,
-      moTa: map['moTa'] as String,
-    );
-  }
-}
-
-//Lớp truy cập dữ liệu
-class DrinkTeaSnapshot{
-  DrinkTea drinkTea; // biến vị trí của document trên firebase_storage
-  DocumentReference ref;
-
-  DrinkTeaSnapshot({required this.drinkTea,required this.ref});
-
-  factory DrinkTeaSnapshot.fromMap(DocumentSnapshot docSnap){
-    return DrinkTeaSnapshot(
-        drinkTea: DrinkTea.fromJson(docSnap.data() as Map<String, dynamic>), // ép kiểu
-        ref: docSnap.reference
-    );
-  }
-
-  static Future<DocumentReference> themDT(DrinkTea drinkTea) async {
-    return FirebaseFirestore.instance.collection("Tea").add(drinkTea.toJson());
-  }
-
-  //Cập nhật dữ liệu
-  Future<void> capNhatDT(DrinkTea drinkTea) async{
-    return ref.update(drinkTea.toJson());
-  }
-
-  //Xóa dữ liệu
-  Future<void> xoaDT() async{
-    return ref.delete();
-  }
-
-  //Truy vấn dữ liệu theo thời gian thực
-  static Stream<List<DrinkTeaSnapshot>> getAll(){
-    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Tea")
-        .snapshots();
-    return sqs.map(
-            (qs) => qs.docs.map(
-                (docSnap) => DrinkTeaSnapshot.fromMap(docSnap)
-        ).toList()
-    );
-  }
-
-  static Future<List<DrinkTeaSnapshot>> getAllOnce() async {
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Tea").get();
-    return qs.docs.map((docSnap) => DrinkTeaSnapshot.fromMap(docSnap)).toList();
-  }
-  //Truy vấn dữ liệu một lần
-  static Future<List<DrinkTeaSnapshot>> getAll2() async{
-    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Tea").get();
-    return qs.docs.map(
-            (docSnap) => DrinkTeaSnapshot.fromMap(docSnap)
-    ).toList();
-  }
-}
-class GioHangItemT{
-  DrinkTea drinkTea;
-  int sluongT;
-
-  GioHangItemT({required this.drinkTea,required this.sluongT});
-}
-
 
 //////////////////////////Cake//////////////////////
 ///////////////////////Tea////////////////////////
@@ -412,20 +228,168 @@ class CakeSnapshot{
     return qs.docs.map((docSnap) => CakeSnapshot.fromMap(docSnap)).toList();
   }
 }
+////////////////////////////////Coffee///////////////////
+class Drink{
+  String id;
+  String ten;
+  String? anh;
+  int gia;
+  String? moTa;
+  Drink({required this.id,required this.ten, required this.anh, required this.gia,this.moTa});
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'ten': this.ten,
+      'anh': this.anh,
+      'gia': this.gia,
+      'moTa': this.moTa,
+    };
+  }
 
-class GioHangItemC {
-  Cake cake;
-  int sluongC;
-
-  GioHangItemC({
-    required this.cake,
-    required this.sluongC,
-  });
+  factory Drink.fromJson(Map<String, dynamic> map) {
+    return Drink(
+      id: map['id'] as String,
+      ten: map['ten'] as String,
+      anh: map['anh'] as String,
+      gia: map['gia'] as int,
+      moTa: map['moTa'] as String,
+    );
+  }
 }
 
-///////////////////Juices////////////
+//Lớp truy cập dữ liệu
+class DrinkSnapshot{
+  Drink drink; // biến vị trí của document trên firebase_storage
+  DocumentReference ref;
+
+  DrinkSnapshot({required this.drink,required this.ref});
+
+  factory DrinkSnapshot.fromMap(DocumentSnapshot docSnap){
+    return DrinkSnapshot(
+        drink: Drink.fromJson(docSnap.data() as Map<String, dynamic>), // ép kiểu
+        ref: docSnap.reference
+    );
+  }
+
+  static Future<DocumentReference> themD(Drink drink) async {
+    return FirebaseFirestore.instance.collection("DrinkCoffee").add(drink.toJson());
+  }
+
+  //Cập nhật dữ liệu
+  Future<void> capNhatD(Drink drink) async{
+    return ref.update(drink.toJson());
+  }
+
+  //Xóa dữ liệu
+  Future<void> xoaD() async{
+    return ref.delete();
+  }
+
+  //Truy vấn dữ liệu theo thời gian thực
+  static Stream<List<DrinkSnapshot>> getAll(){
+    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("DrinkCoffee")
+        .snapshots();
+    return sqs.map(
+            (qs) => qs.docs.map(
+                (docSnap) => DrinkSnapshot.fromMap(docSnap)).toList()
+    );
+  }
+
+  //
+  static Future<List<DrinkSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
+    return qs.docs.map((docSnap) => DrinkSnapshot.fromMap(docSnap)).toList();
+  }
+
+  //Truy vấn dữ liệu một lần
+  static Future<List<DrinkSnapshot>> getAll2() async{
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("DrinkCoffee").get();
+    return qs.docs.map(
+            (docSnap) => DrinkSnapshot.fromMap(docSnap)
+    ).toList();
+  }
+}
+
 ///////////////////////Tea////////////////////////
+class DrinkTea{
+  String id;
+  String ten;
+  String? anh;
+  int gia;
+  String? moTa;
+  DrinkTea({required this.id,required this.ten, required this.anh, required this.gia,this.moTa});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'ten': this.ten,
+      'anh': this.anh,
+      'gia': this.gia,
+      'moTa': this.moTa,
+    };
+  }
+
+  factory DrinkTea.fromJson(Map<String, dynamic> map) {
+    return DrinkTea(
+      id: map['id'] as String,
+      ten: map['ten'] as String,
+      anh: map['anh'] as String,
+      gia: map['gia'] as int,
+      moTa: map['moTa'] as String,
+    );
+  }
+}
+class DrinkTeaSnapshot{
+  DrinkTea drinkTea; // biến vị trí của document trên firebase_storage
+  DocumentReference ref;
+
+  DrinkTeaSnapshot({required this.drinkTea,required this.ref});
+
+  factory DrinkTeaSnapshot.fromMap(DocumentSnapshot docSnap){
+    return DrinkTeaSnapshot(
+        drinkTea: DrinkTea.fromJson(docSnap.data() as Map<String, dynamic>), // ép kiểu
+        ref: docSnap.reference
+    );
+  }
+
+  static Future<DocumentReference> themDT(DrinkTea drinkTea) async {
+    return FirebaseFirestore.instance.collection("Tea").add(drinkTea.toJson());
+  }
+
+  //Cập nhật dữ liệu
+  Future<void> capNhatDT(DrinkTea drinkTea) async{
+    return ref.update(drinkTea.toJson());
+  }
+
+  //Xóa dữ liệu
+  Future<void> xoaDT() async{
+    return ref.delete();
+  }
+
+  //Truy vấn dữ liệu theo thời gian thực
+  static Stream<List<DrinkTeaSnapshot>> getAll(){
+    Stream<QuerySnapshot> sqs = FirebaseFirestore.instance.collection("Tea")
+        .snapshots();
+    return sqs.map(
+            (qs) => qs.docs.map(
+                (docSnap) => DrinkTeaSnapshot.fromMap(docSnap)
+        ).toList()
+    );
+  }
+
+  static Future<List<DrinkTeaSnapshot>> getAllOnce() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Tea").get();
+    return qs.docs.map((docSnap) => DrinkTeaSnapshot.fromMap(docSnap)).toList();
+  }
+  //Truy vấn dữ liệu một lần
+  static Future<List<DrinkTeaSnapshot>> getAll2() async{
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection("Tea").get();
+    return qs.docs.map(
+            (docSnap) => DrinkTeaSnapshot.fromMap(docSnap)
+    ).toList();
+  }
+}
 class Juices{
   String id;
   String ten;
@@ -507,6 +471,48 @@ class JuiceSnapshot{
     return qs.docs.map((docSnap) => JuiceSnapshot.fromMap(docSnap)).toList();
   }
 }
+//Lớp truy cập dữ liệu
+
+class GioHangItem{
+  Fruit f;
+  int soLuong;
+
+  GioHangItem({required this.f,required this.soLuong});
+}
+
+
+class GioHangItemT{
+  DrinkTea drinkTea;
+  int sluongT;
+
+  GioHangItemT({required this.drinkTea,required this.sluongT});
+}
+
+///////////////////Juices////////////
+///////////////////////Tea////////////////////////
+
+class GioHangItemm{
+  Drink dr;
+  int sluongCF;
+
+  GioHangItemm({required this.dr,required this.sluongCF});
+}
+
+
+
+
+
+class GioHangItemC {
+  Cake cake;
+  int sluongC;
+
+  GioHangItemC({
+    required this.cake,
+    required this.sluongC,
+  });
+}
+
+
 
 
 class GioHangItemJ{
