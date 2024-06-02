@@ -1,9 +1,9 @@
-import 'package:btl/bai_tap_lon/Update_history/history.dart';
-import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:btl/bai_tap_lon/Update_history/history.dart';
+import 'package:btl/bai_tap_lon/home/page_home_coffe.dart';
 
-class PaymentSuccessPage extends StatelessWidget {
+class PaymentSuccessPage extends StatefulWidget {
   final int orderId;
   final double totalAmount;
   final DateTime orderDateTime;
@@ -11,18 +11,37 @@ class PaymentSuccessPage extends StatelessWidget {
   PaymentSuccessPage({required this.orderId, required this.totalAmount, required this.orderDateTime});
 
   @override
-  Widget build(BuildContext context) {
-    String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(orderDateTime);
-    String amount = totalAmount.toStringAsFixed(0) + ' vnđ';
-    TransactionItem newTransaction = TransactionItem(
-      date: formattedDate,
-      description: 'Đơn hàng $orderId',
-      amount: amount,
-      status: 'Hoàn tất',
-    );
+  State<PaymentSuccessPage> createState() => _PaymentSuccessPageState();
+}
 
-    // Thêm giao dịch mới vào store
-    TransactionStore().addTransaction(newTransaction);
+class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // Thêm giao dịch mới vào store
+      addTransactionToStore();
+
+      // Hiển thị thông báo
+      final snackBar = SnackBar(
+        content: Text('Đơn hàng của bạn đã thanh toán thành công!'),
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // Chuyển hướng người dùng đến trang chủ
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => PageHomeCf()),
+        );
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(widget.orderDateTime);
+    String amount = widget.totalAmount.toStringAsFixed(0) + ' vnđ';
 
     return Scaffold(
       body: Center(
@@ -38,7 +57,7 @@ class PaymentSuccessPage extends StatelessWidget {
             SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text('Mã số đơn hàng: $orderId'),
+              child: Text('Mã số đơn hàng: ${widget.orderId}'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -103,6 +122,20 @@ class PaymentSuccessPage extends StatelessWidget {
       ),
     );
   }
+
+  void addTransactionToStore() {
+    String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(widget.orderDateTime);
+    String amount = widget.totalAmount.toStringAsFixed(0) + ' vnđ';
+    TransactionItem newTransaction = TransactionItem(
+      date: formattedDate,
+      description: 'Đơn hàng ${widget.orderId}',
+      amount: amount,
+      status: 'Hoàn tất',
+    );
+
+    // Thêm giao dịch mới vào store
+    TransactionStore().addTransaction(newTransaction);
+  }
 }
 
 
@@ -125,4 +158,3 @@ class TransactionStore {
   }
 
 }
-

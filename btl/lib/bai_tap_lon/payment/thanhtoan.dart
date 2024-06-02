@@ -38,10 +38,14 @@ class ShoppingCartPage extends StatelessWidget {
                   } else {
                     return ListView(
                       children: [
-                        ...controller.gioHangg.map((item) => buildCartItem(context, item, controller)),
-                        ...controller.gioHangT.map((item) => buildCartItem(context, item, controller)),
-                        ...controller.gioHangC.map((item) => buildCartItem(context, item, controller)),
-                        ...controller.gioHangJ.map((item) => buildCartItem(context, item, controller)),
+                        ...controller.gioHangg.map((item) =>
+                            buildCartItem(context, item, controller)),
+                        ...controller.gioHangT.map((item) =>
+                            buildCartItem(context, item, controller)),
+                        ...controller.gioHangC.map((item) =>
+                            buildCartItem(context, item, controller)),
+                        ...controller.gioHangJ.map((item) =>
+                            buildCartItem(context, item, controller)),
                       ],
                     );
                   }
@@ -68,7 +72,12 @@ class ShoppingCartPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
                     final totalAmount = controller.calculateTotalAmount();
-                    hienthiDiaLog(context, controller, totalAmount);
+                    Get.dialog(
+                      PaymentConfirmationPage(
+                        controller: controller,
+                        totalAmount: totalAmount,
+                      ),
+                    );
                   }
                 },
                 child: Text(
@@ -86,7 +95,8 @@ class ShoppingCartPage extends StatelessWidget {
     );
   }
 
-  Widget buildCartItem(BuildContext context, dynamic item, SP_Controller controller) {
+  Widget buildCartItem(BuildContext context, dynamic item,
+      SP_Controller controller) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey, width: 3), // Viền đậm hơn
@@ -94,23 +104,34 @@ class ShoppingCartPage extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(vertical: 5.0),
       child: ListTile(
-        leading: Image.network(item is GioHangItemm ? item.dr.anh : (item is GioHangItemT ? item.drinkTea.anh : (item is GioHangItemC ? item.cake.anh : item.juices.anh))),
-        title: Text(item is GioHangItemm ? item.dr.ten : (item is GioHangItemT ? item.drinkTea.ten : (item is GioHangItemC ? item.cake.ten : item.juices.ten))),
-        subtitle: Text('Số lượng: ${item is GioHangItemm ? item.sluongCF : (item is GioHangItemT ? item.sluongT : (item is GioHangItemC ? item.sluongC : item.sluongJ))}'),
+        leading: Image.network(
+            item is GioHangItemm ? item.dr.anh : (item is GioHangItemT ? item
+                .drinkTea.anh : (item is GioHangItemC ? item.cake.anh : item
+                .juices.anh))),
+        title: Text(
+            item is GioHangItemm ? item.dr.ten : (item is GioHangItemT ? item
+                .drinkTea.ten : (item is GioHangItemC ? item.cake.ten : item
+                .juices.ten))),
+        subtitle: Text('Số lượng: ${item is GioHangItemm
+            ? item.sluongCF
+            : (item is GioHangItemT ? item.sluongT : (item is GioHangItemC
+            ? item.sluongC
+            : item.sluongJ))}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                Get.to(() => PageUpdateDrink(
-                  product: item is GioHangItemm ? item.dr :
-                  (item is GioHangItemT ? item.drinkTea :
-                  (item is GioHangItemC ? item.cake : item.juices)),
-                  initialQuantity: item is GioHangItemm ? item.sluongCF :
-                  (item is GioHangItemT ? item.sluongT :
-                  (item is GioHangItemC ? item.sluongC : item.sluongJ)),
-                ));
+                Get.to(() =>
+                    PageUpdateDrink(
+                      product: item is GioHangItemm ? item.dr :
+                      (item is GioHangItemT ? item.drinkTea :
+                      (item is GioHangItemC ? item.cake : item.juices)),
+                      initialQuantity: item is GioHangItemm ? item.sluongCF :
+                      (item is GioHangItemT ? item.sluongT :
+                      (item is GioHangItemC ? item.sluongC : item.sluongJ)),
+                    ));
               },
             ),
             IconButton(
@@ -134,56 +155,243 @@ class ShoppingCartPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  void hienthiDiaLog(BuildContext context, SP_Controller controller, double totalAmount) {
+  // Hàm hienthiDiaLog chỉ hiển thị thông tin văn bản của sản phẩm mà không cần hình ảnh
+  // void hienthiDiaLog(BuildContext context, SP_Controller controller, double totalAmount) {
+  //   TransactionStore transactionStore = TransactionStore();
+  //   var random = Random();
+  //   int orderId = random.nextInt(1000000);
+  //
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         contentPadding: EdgeInsets.zero,
+  //         content: Container(
+  //           width: MediaQuery.of(context).size.width * 0.75, // Chiều rộng là 3/4 màn hình
+  //           padding: EdgeInsets.all(16.0),
+  //           child: SingleChildScrollView(
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   'Xác nhận thanh toán',
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 18.0,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 16.0),
+  //                 Text(
+  //                   'Mã số đơn hàng: $orderId',
+  //                   style: TextStyle(fontSize: 16.0),
+  //                 ),
+  //                 SizedBox(height: 8.0),
+  //                 Text(
+  //                   'Ngày giờ đặt: ${DateTime.now()}',
+  //                   style: TextStyle(fontSize: 16.0),
+  //                 ),
+  //                 SizedBox(height: 16.0),
+  //                 Text(
+  //                   'Thông tin sản phẩm:',
+  //                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+  //                 ),
+  //                 SizedBox(height: 8.0),
+  //                 // Hiển thị danh sách sản phẩm mà không có hình ảnh
+  //                 ListView.builder(
+  //                   shrinkWrap: true,
+  //                   physics: NeverScrollableScrollPhysics(),
+  //                   itemCount: controller.gioHangg.length +
+  //                       controller.gioHangT.length +
+  //                       controller.gioHangC.length +
+  //                       controller.gioHangJ.length,
+  //                   itemBuilder: (context, index) {
+  //                     dynamic item;
+  //                     if (index < controller.gioHangg.length) {
+  //                       item = controller.gioHangg[index];
+  //                     } else if (index < controller.gioHangg.length + controller.gioHangT.length) {
+  //                       item = controller.gioHangT[index - controller.gioHangg.length];
+  //                     } else if (index < controller.gioHangg.length + controller.gioHangT.length + controller.gioHangC.length) {
+  //                       item = controller.gioHangC[index - controller.gioHangg.length - controller.gioHangT.length];
+  //                     } else {
+  //                       item = controller.gioHangJ[index - controller.gioHangg.length - controller.gioHangT.length - controller.gioHangC.length];
+  //                     }
+  //                     return ListTile(
+  //                       title: Text('${item is GioHangItemm ? item.dr.ten : (item is GioHangItemT ? item.drinkTea.ten : (item is GioHangItemC ? item.cake.ten : item.juices.ten))} x${item is GioHangItemm ? item.sluongCF : (item is GioHangItemT ? item.sluongT : (item is GioHangItemC ? item.sluongC : item.sluongJ))}'),
+  //                     );
+  //                   },
+  //                 ),
+  //                 SizedBox(height: 16.0),
+  //                 Text(
+  //                   'Tổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.',
+  //                   style: TextStyle(fontSize: 16.0),
+  //                 ),
+  //                 SizedBox(height: 16.0),
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   children: [
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         TransactionItem newTransaction = TransactionItem(
+  //                           date: DateTime.now().toString(),
+  //                           description: 'Thanh toán thất bại',
+  //                           amount: '${totalAmount.toStringAsFixed(0)} vnđ.',
+  //                           status: 'Thất bại',
+  //                         );
+  //                         transactionStore.addTransaction(newTransaction);
+  //                         Navigator.of(context).pop();
+  //                       },
+  //                       child: Text('Hủy'),
+  //                     ),
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         controller.xoaTatCaSanPham();
+  //                         Navigator.of(context).pop();
+  //                         Navigator.of(context).pushAndRemoveUntil(
+  //                           MaterialPageRoute(
+  //                             builder: (context) => PaymentSuccessPage(
+  //                               orderId: orderId,
+  //                               totalAmount: totalAmount,
+  //                               orderDateTime: DateTime.now(),
+  //                             ),
+  //                           ),
+  //                               (Route<dynamic> route) => false,
+  //                         );
+  //                       },
+  //                       child: Text('Xác nhận'),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+
+class PaymentConfirmationPage extends StatelessWidget {
+  final SP_Controller controller;
+  final double totalAmount;
+
+  const PaymentConfirmationPage({
+    Key? key,
+    required this.controller,
+    required this.totalAmount,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     TransactionStore transactionStore = TransactionStore();
-    // Generate a random order ID
     var random = Random();
-    int orderId = random.nextInt(1000000); // Random order ID between 0 and 999999
+    int orderId = random.nextInt(1000000);
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Xác nhận thanh toán'),
-          content: Text('Mã số đơn hàng: $orderId \nTổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Hủy'),
-              onPressed: () {
-                // Add transaction to history with "Thất bại" status
-                TransactionItem newTransaction = TransactionItem(
-                  date: DateTime.now().toString(), // Get the current date
-                  description: 'Thanh toán thất bại',
-                  amount: '${totalAmount.toStringAsFixed(0)} vnđ.',
-                  status: 'Thất bại',
-                );
-                transactionStore.addTransaction(newTransaction);
-                // Dismiss the dialog
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Xác nhận'),
-              onPressed: () {
-                controller.xoaTatCaSanPham();
-                Navigator.of(context).pop();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => PaymentSuccessPage(
-                      orderId: orderId,
-                      totalAmount: totalAmount,
-                      orderDateTime: DateTime.now(), // Add orderDateTime here
-                    ),
+    return AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.75, // Chiều rộng là 3/4 màn hình
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Xác nhận thanh toán',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Mã số đơn hàng: $orderId',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                'Ngày giờ đặt: ${DateTime.now()}',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Thông tin sản phẩm:',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8.0),
+              // Hiển thị danh sách sản phẩm mà không có hình ảnh
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: controller.gioHangg.length +
+                    controller.gioHangT.length +
+                    controller.gioHangC.length +
+                    controller.gioHangJ.length,
+                itemBuilder: (context, index) {
+                  dynamic item;
+                  if (index < controller.gioHangg.length) {
+                    item = controller.gioHangg[index];
+                  } else if (index < controller.gioHangg.length + controller.gioHangT.length) {
+                    item = controller.gioHangT[index - controller.gioHangg.length];
+                  } else if (index < controller.gioHangg.length + controller.gioHangT.length + controller.gioHangC.length) {
+                    item = controller.gioHangC[index - controller.gioHangg.length - controller.gioHangT.length];
+                  } else {
+                    item = controller.gioHangJ[index - controller.gioHangg.length - controller.gioHangT.length - controller.gioHangC.length];
+                  }
+                  return ListTile(
+                    title: Text('${item is GioHangItemm ? item.dr.ten : (item is GioHangItemT ? item.drinkTea.ten : (item is GioHangItemC ? item.cake.ten : item.juices.ten))} x${item is GioHangItemm ? item.sluongCF : (item is GioHangItemT ? item.sluongT : (item is GioHangItemC ? item.sluongC : item.sluongJ))}'),
+                  );
+                },
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Tổng số tiền cần thanh toán là ${totalAmount.toStringAsFixed(0)} vnđ.',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      TransactionItem newTransaction = TransactionItem(
+                        date: DateTime.now().toString(),
+                        description: 'Thanh toán thất bại',
+                        amount: '${totalAmount.toStringAsFixed(0)} vnđ.',
+                        status: 'Thất bại',
+                      );
+                      transactionStore.addTransaction(newTransaction);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Hủy'),
                   ),
-                      (Route<dynamic> route) => false,
-                );
-              },
-            ),
-          ],
-        );
-      },
+                  ElevatedButton(
+                    onPressed: () {
+                      controller.xoaTatCaSanPham();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => PaymentSuccessPage(
+                            orderId: orderId,
+                            totalAmount: totalAmount,
+                            orderDateTime: DateTime.now(),
+                          ),
+                        ),
+                            (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text('Xác nhận'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-

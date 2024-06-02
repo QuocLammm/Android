@@ -8,8 +8,16 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class PageLogin extends StatelessWidget {
-  const PageLogin({super.key});
+class PageLogin extends StatefulWidget {
+  const PageLogin({Key? key}) : super(key: key);
+
+  @override
+  _PageLoginState createState() => _PageLoginState();
+}
+
+class _PageLoginState extends State<PageLogin> {
+  String? _newUserFullName;
+
   Duration get loginTime => const Duration(milliseconds: 2250);
 
   Future<String?> _authUser(LoginData data) async {
@@ -31,14 +39,6 @@ class PageLogin extends StatelessWidget {
     }
   }
 
-  Future<bool> _checkDuplicatePhoneNumber(String phoneNumber) async {
-    QuerySnapshot query = await FirebaseFirestore.instance
-        .collection('users')
-        .where('sdt', isEqualTo: phoneNumber)
-        .get();
-
-    return query.docs.isNotEmpty;
-  }
   Future<String?> _signupUser(SignupData data) async {
     try {
       final additionalSignupData = data.additionalSignupData;
@@ -59,6 +59,9 @@ class PageLogin extends StatelessWidget {
         'role': 'user',
         'anh': '',
       });
+      setState(() {
+        _newUserFullName = hoTen;
+      });
       return null; // return null if signup is successful
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -70,6 +73,15 @@ class PageLogin extends StatelessWidget {
           return 'Đã xảy ra lỗi';
       }
     }
+  }
+
+  Future<bool> _checkDuplicatePhoneNumber(String phoneNumber) async {
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('sdt', isEqualTo: phoneNumber)
+        .get();
+
+    return query.docs.isNotEmpty;
   }
 
   Future<String?> _recoverPassword(String name) async {
@@ -90,7 +102,6 @@ class PageLogin extends StatelessWidget {
     return Scaffold(
       body: FlutterLogin(
         title: 'Hello!',
-        //logo: const AssetImage('assets/images/ecorp-lightblue.png'), // Add a logo if you like
         onLogin: _authUser,
         onSignup: _signupUser,
         loginProviders: [
@@ -125,7 +136,7 @@ class PageLogin extends StatelessWidget {
             keyName: 'sdt',
             displayName: 'Số điện thoại',
             icon: Icon(Icons.phone),
-            userType: LoginUserType.phone
+            userType: LoginUserType.phone,
           ),
         ],
         onSubmitAnimationCompleted: () async {
@@ -140,7 +151,6 @@ class PageLogin extends StatelessWidget {
               String role = userDoc.get('role');
               if (role == 'admin') {
                 Navigator.of(context).pushReplacement(
-                  //Đăng nhập dưới dạng Admin
                   MaterialPageRoute(builder: (context) => PageHomeAdmin()),
                 );
               } else {

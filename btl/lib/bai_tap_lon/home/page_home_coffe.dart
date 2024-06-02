@@ -10,6 +10,7 @@ import 'package:btl/bai_tap_lon/home/page_notification.dart';
 import 'package:btl/bai_tap_lon/home/page_search.dart';
 import 'package:btl/bai_tap_lon/home/page_setting.dart';
 import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
+import 'package:btl/bai_tap_lon/sale/sale.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +29,7 @@ class PageHomeCf extends StatefulWidget {
 class _PageHomeCfState extends State<PageHomeCf> {
   List<dynamic> bestsellerItems = [];
   late String lat, long;
+  String? _userName;
 
   final List<IconData> iconList = [
     Icons.search,
@@ -172,7 +174,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PageNotification()),
+                    MaterialPageRoute(builder: (context) => PageNotification(userName: _userName ?? '')),
                   ); // giỏ hàng
                 },
                 child: Icon(Icons.notifications,color: Colors.black),
@@ -323,6 +325,9 @@ class buildPageHome extends StatelessWidget {
                 color: Colors.lightBlue,
                 elevation: 1,
                 child: GestureDetector(
+                  onTap: () {
+                    _openPageSale(context);
+                  },
                   child: Column(
                     children: [
                       Expanded(
@@ -368,6 +373,9 @@ class buildPageHome extends StatelessWidget {
                 color: Colors.yellowAccent,
                 elevation: 1,
                 child: GestureDetector(
+                  onTap: () {
+
+                  },
                   child: Column(
                     children: [
                       Expanded(
@@ -597,4 +605,10 @@ class _BestsellerViewPagerState extends State<BestsellerViewPager> {
     );
     // Placeholder
   }
+}
+
+void _openPageSale(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (context) => PageSale()),
+  );
 }

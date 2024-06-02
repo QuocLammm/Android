@@ -16,7 +16,7 @@ class DrinkJuice extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Danh sách nước uống",
+          "Danh sách nước ép",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,

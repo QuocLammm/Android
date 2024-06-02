@@ -4,113 +4,128 @@ import 'package:btl/bai_tap_lon/drink/drink_tea/drink_tea.dart';
 import 'package:btl/bai_tap_lon/drink/juice/drink_juices.dart';
 import 'package:flutter/material.dart';
 
-
 class DSDrink extends StatelessWidget {
-  const DSDrink({super.key});
+  const DSDrink({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Menu"),
+        title: Text("Danh mục"),
       ),
-      body: GridView.extent(
-          maxCrossAxisExtent: 380,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Card(
-            color: Colors.black,
-            elevation: 1,
+          Expanded(
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder:(context) => DrinkCoffe(),)
+                MaterialPageRoute(builder: (context) => DrinkCoffe()),
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset("asset/images/hinh-anh-ly-ca-phe.jpg"),
+              child: Card(
+                color: Colors.black,
+                elevation: 1,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset("asset/images/hinh-anh-ly-ca-phe.jpg"),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text("Cà phê ",
-                      style: TextStyle(color: Colors.white, fontSize: 20),),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Cà phê ",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-          Card(
-            color: Colors.greenAccent,
-            elevation: 1,
+          Expanded(
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder:(context) => DrinkTea(),)
+                MaterialPageRoute(builder: (context) => DrinkTea()),
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset("asset/images/tdao.png"),
+              child: Card(
+                color: Colors.greenAccent,
+                elevation: 1,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset("asset/images/tdao.png"),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text("Trà giải nhiệt ",
-                      style: TextStyle(color: Colors.white, fontSize: 20),),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Trà giải nhiệt ",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-          Card(
-            color: Colors.pinkAccent,
-            elevation: 1,
+          Expanded(
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder:(context) => CakeCoffe(),)
+                MaterialPageRoute(builder: (context) => CakeCoffe()),
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset("asset/images/banh_ngot.png"),
+              child: Card(
+                color: Colors.pinkAccent,
+                elevation: 1,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset("asset/images/banh_ngot.png"),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text("Bánh ngọt ",
-                      style: TextStyle(color: Colors.white, fontSize: 20),),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Bánh ngọt ",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-          Card(
-            color: Colors.tealAccent,
-            elevation: 1,
+          Expanded(
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder:(context) => DrinkJuice(),)
+                MaterialPageRoute(builder: (context) => DrinkJuice()),
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset("asset/images/ep.png"),
+              child: Card(
+                color: Colors.tealAccent,
+                elevation: 1,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset("asset/images/ep.png"),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text("Các loại nước ép",
-                      style: TextStyle(color: Colors.black54, fontSize: 20),),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        "Các loại nước ép",
+                        style: TextStyle(color: Colors.black54, fontSize: 20),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -119,6 +134,3 @@ class DSDrink extends StatelessWidget {
     );
   }
 }
-
-
-//////////
