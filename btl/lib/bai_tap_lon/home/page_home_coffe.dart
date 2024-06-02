@@ -40,8 +40,8 @@ class _PageHomeCfState extends State<PageHomeCf> {
 
   final List<String> pageTitles = [
     "Tìm kiếm",
-    "Giỏ hàng của tôi",
-    "Thông tin cá nhân",
+    "Giỏ hàng",
+    "Thông tin",
     "Cài đặt",
     "Trang chủ",
   ];
@@ -313,7 +313,14 @@ class buildPageHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Best Seller"),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("BEST SELLER", style: TextStyle(
+            fontSize: 20,
+            color: Colors.red,
+            fontWeight: FontWeight.bold
+          ),),
+        ),
         bestsellerItems.isNotEmpty
             ? BestsellerViewPager(items: bestsellerItems)
             : CircularProgressIndicator(),

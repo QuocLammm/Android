@@ -14,11 +14,9 @@ class ShoppingCartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Giỏ hàng"),
-        backgroundColor: Colors.lightBlueAccent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(right:10.0,left: 10.0,bottom: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -121,7 +119,7 @@ class ShoppingCartPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color:Colors.blue),
               onPressed: () {
                 Get.to(() =>
                     PageUpdateDrink(
@@ -135,7 +133,7 @@ class ShoppingCartPage extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red,),
               onPressed: () {
                 dynamic productToDelete;
                 if (item is GioHangItemm) {
