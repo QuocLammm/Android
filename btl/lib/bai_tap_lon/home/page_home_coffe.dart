@@ -104,32 +104,39 @@ class _PageHomeCfState extends State<PageHomeCf> {
               width: 40,
               height: 40,
               color: Colors.transparent,
-              child: FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
-                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("Đã xảy ra lỗi: ${snapshot.error}");
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
-
-                  if (!snapshot.hasData || !snapshot.data!.exists) {
-                    return Text("Không có dữ liệu");
-                  }
-
-                  final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
-                  final MyUser userinfor = userSnapshot.user;
-
-                  return userinfor.anh != null ? Image.network(userinfor.anh!,
-                    fit: BoxFit.cover,
-                  )
-                      : Image.asset(
-                    "asset/images/default_avatar.png",
-                    fit: BoxFit.cover,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PageProfile()),
                   );
                 },
+                child: FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Đã xảy ra lỗi: ${snapshot.error}");
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return Text("Không có dữ liệu");
+                    }
+
+                    final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
+                    final MyUser userinfor = userSnapshot.user;
+
+                    return userinfor.anh != null ? Image.network(userinfor.anh!,
+                      fit: BoxFit.cover,
+                    )
+                        : Image.asset(
+                      "asset/images/default_avatar.png",
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -291,6 +298,7 @@ class _PageHomeCfState extends State<PageHomeCf> {
     return await Geolocator.getCurrentPosition();
   }
 }
+
 
 class buildPageHome extends StatelessWidget {
   const buildPageHome({
