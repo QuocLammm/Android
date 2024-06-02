@@ -128,11 +128,10 @@ class _PageHomeCfState extends State<PageHomeCf> {
                     final MyUserSnapshot userSnapshot = MyUserSnapshot.fromMap(snapshot.data!);
                     final MyUser userinfor = userSnapshot.user;
 
-                    return userinfor.anh != null ? Image.network(userinfor.anh!,
+                    return userinfor.anh != null && userinfor.anh!.isNotEmpty ? Image.network(userinfor.anh!,
                       fit: BoxFit.cover,
                     )
-                        : Image.asset(
-                      "asset/images/default_avatar.png",
+                        : Image.asset("asset/images/default_avatar.png",
                       fit: BoxFit.cover,
                     );
                   },
