@@ -47,7 +47,7 @@ class _PageEditProfileState extends State<PageEditProfile> {
                       height: 128,
                       color: Colors.transparent,
                       child: (_xFile == null || _xFile!.path.isEmpty)
-                          ? (widget.userSnapshot.user.anh == null
+                          ? (widget.userSnapshot.user.anh == null || widget.userSnapshot.user.anh!.isEmpty
                           ? Image.asset(
                         "asset/images/default_avatar.png",
                         fit: BoxFit.cover,

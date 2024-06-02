@@ -118,11 +118,18 @@ class _PageSearchState extends State<PageSearch> {
                     return Container();
                   }
 
-                  return ListTile(
-                    leading: imageUrl.isNotEmpty ? Image.network(imageUrl, width: 50, height: 50) : null,
-                    title: Text(name),
-                    trailing: Text('$price VND'),
-                    onTap: () => _navigateToDetail(product),
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200], borderRadius: BorderRadius.circular(12)
+                    ),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                    child: ListTile(
+                      leading: imageUrl.isNotEmpty ? Image.network(imageUrl, width: 70, height: 70) : null,
+                      title: Text(name),
+                      trailing: Text('$price VND'),
+                      onTap: () => _navigateToDetail(product),
+                    ),
                   );
                 },
               ),
