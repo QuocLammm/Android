@@ -3,7 +3,7 @@ import 'package:btl/bai_tap_lon/firebase/model.dart';
 import 'package:flutter/material.dart';
 
 class PageQuanLyKhoHang extends StatelessWidget {
-  List imgName = ['Cà phê','Trà giải nhiệt','Bánh ngọt','Nước ép'];
+  List imgName = ['Cà phê','Trà ','Bánh ngọt','Nước ép'];
   List imgList =['hinh-anh-ly-ca-phe.jpg','tdao.png','banh_ngot.png','ep.png'];
   @override
   Widget build(BuildContext context) {

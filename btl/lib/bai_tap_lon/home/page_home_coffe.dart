@@ -11,6 +11,7 @@ import 'package:btl/bai_tap_lon/home/page_search.dart';
 import 'package:btl/bai_tap_lon/home/page_setting.dart';
 import 'package:btl/bai_tap_lon/payment/thanhtoan.dart';
 import 'package:btl/bai_tap_lon/sale/sale.dart';
+import 'package:btl/bai_tap_lon/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
@@ -404,6 +405,11 @@ class buildPageHome extends StatelessWidget {
                 color: Colors.green,
                 elevation: 1,
                 child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => StoreIntroductionPage(),)
+                    );
+                  },
                   child: Column(
                     children: [
                       Expanded(

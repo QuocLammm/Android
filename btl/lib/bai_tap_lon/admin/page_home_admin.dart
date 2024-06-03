@@ -32,29 +32,6 @@ class PageHomeAdmin extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    //Hóa đơn
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => PageHoaDon()),
-                    // );
-                  },
-                  child: Text(
-                    "Quản lý hóa đơn",
-                    style: TextStyle(fontSize: 18, color: Colors.white), // Chữ trắng
-                  ),
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.green), // Màu viền xanh
-                  color: Colors.lightBlueAccent, // Nền xanh nhạt
-                  borderRadius: BorderRadius.circular(10), // Bo tròn góc
-                ),
-                child: TextButton(
-                  onPressed: () {
                      Navigator.push(context,MaterialPageRoute(builder: (context) => PageQuanLyKhoHang()),);
                   },
                   child: Text(
@@ -79,7 +56,7 @@ class PageHomeAdmin extends StatelessWidget {
                     // );
                   },
                   child: Text(
-                    "Quản lý báo cáo",
+                    "Quản lý đơn hàng",
                     style: TextStyle(fontSize: 18, color: Colors.white), // Chữ trắng
                   ),
                 ),
