@@ -30,7 +30,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       // Chuyển hướng người dùng đến trang chủ
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 10), () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => PageHomeCf()),
         );
@@ -77,7 +77,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text('Tour Les Temp rất vui được phục vụ quý khách!'),
+              child: Text('LPT rất vui được phục vụ quý khách!'),
             ),
             SizedBox(height: 20),
             Row(
